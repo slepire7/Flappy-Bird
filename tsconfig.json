@@ -1,0 +1,15 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "noUnusedLocals": true,
+    "sourceMap": false,
+    "target": "es6",
+    "outDir": "script"
+  },  
+  "include": [
+    "ts/*"
+  ]
+}
