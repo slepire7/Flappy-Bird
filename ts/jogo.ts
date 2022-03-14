@@ -1,23 +1,10 @@
-import { Globais, IBaseModel, ICano, IFlappybird, IPageGame, Movimento, Pages, Dimensoes, ScoreGame, TrilhaSonara } from './utils'
-
-const TrilhasSonoras: TrilhaSonara[] = [
-    {
-        tipo: 'HIT',
-        Som: new Audio('../asset/efeitos/hit.wav')
-    },
-    {
-        tipo: 'PULO',
-        Som: new Audio('../asset/efeitos/pulo.wav')
-    },
-    {
-        tipo: 'CAIU',
-        Som: new Audio('../asset/efeitos/caiu.wav')
-    },
-    {
-        tipo: 'PONTO',
-        Som: new Audio('../asset/efeitos/ponto.wav')
-    },
-]
+import { Globais, IBaseModel, ICano, IFlappybird, IPageGame, Movimento, Pages, Dimensoes, ScoreGame } from './utils'
+const TrilhasSonoras = {
+    "HIT": () => new Audio('../asset/efeitos/hit.wav'),
+    'PULO': () => new Audio('../asset/efeitos/hit.wav'),
+    'CAIU': () => new Audio('../asset/efeitos/caiu.wav'),
+    'PONTO': () => new Audio('../asset/efeitos/ponto.wav')
+}
 const sprites = new Image();
 sprites.src = '../sprites.png';
 
@@ -183,7 +170,7 @@ namespace Jogo {
                 par.x = par.x - 2;
 
                 if (this.temColisaoComOFlappyBird(par)) {
-                    TrilhasSonoras.find(o => o.tipo === "HIT").Som.play();
+                    TrilhasSonoras.HIT().play();
                     mudaParaTela(Telas.GAME_OVER);
                 }
 
@@ -207,7 +194,7 @@ namespace Jogo {
         public velocidade: number = 0;
         public pulo: number = 4.6;
         pula() {
-            TrilhasSonoras.find(o => o.tipo === "PULO").Som.play()
+            TrilhasSonoras.PULO().play()
             this.velocidade = - this.pulo
         };
         movimentos: Movimento[] = [
@@ -242,11 +229,10 @@ namespace Jogo {
         };
         atualiza: Function = () => {
             if (fazColisao<flappyBird, any>(this, Jogo.Globais.chao)) {
-                TrilhasSonoras.find(o => o.tipo === "CAIU").Som.play()
+                TrilhasSonoras.HIT().play()
                 mudaParaTela(Telas.GAME_OVER);
                 return;
             }
-
             this.velocidade = this.velocidade + this.gravidade;
             this.y = this.y + this.velocidade;
         }
@@ -269,11 +255,11 @@ namespace Jogo {
             }
         };
         atualiza() {
-            const intervaloDeFrames = 20;
+            const intervaloDeFrames = 30;
             const passouOIntervalo = frames % intervaloDeFrames === 0;
 
             if (passouOIntervalo) {
-                TrilhasSonoras.find(o => o.tipo === "PONTO").Som.play();
+                TrilhasSonoras.PONTO().play();
                 this.pontuacao = this.pontuacao + 1;
             }
         }

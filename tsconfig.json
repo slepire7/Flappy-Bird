@@ -5,7 +5,7 @@
     "noEmitOnError": true,
     "removeComments": true,
     "noUnusedLocals": true,
-    "sourceMap": false,
+    "sourceMap": false,    
     "target": "ES2021",
     "outDir": "script"
   },  

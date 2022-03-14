@@ -16,10 +16,6 @@ export type ScoreGame = {
     ouro: IBaseModel
     desenha: Function
 }
-export interface TrilhaSonara {
-    tipo: TypeTrilha
-    Som: HTMLAudioElement
-}
 export type TypeTrilha = "HIT" | "PULO" | "CAIU" | "PONTO";
 export interface IBaseModel extends IBaseAction {
     spriteX: number

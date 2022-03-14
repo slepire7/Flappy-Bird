@@ -1,21 +1,9 @@
-const TrilhasSonoras = [
-    {
-        tipo: 'HIT',
-        Som: new Audio('../asset/efeitos/hit.wav')
-    },
-    {
-        tipo: 'PULO',
-        Som: new Audio('../asset/efeitos/pulo.wav')
-    },
-    {
-        tipo: 'CAIU',
-        Som: new Audio('../asset/efeitos/caiu.wav')
-    },
-    {
-        tipo: 'PONTO',
-        Som: new Audio('../asset/efeitos/ponto.wav')
-    },
-];
+const TrilhasSonoras = {
+    "HIT": () => new Audio('../asset/efeitos/hit.wav'),
+    'PULO': () => new Audio('../asset/efeitos/hit.wav'),
+    'CAIU': () => new Audio('../asset/efeitos/caiu.wav'),
+    'PONTO': () => new Audio('../asset/efeitos/ponto.wav')
+};
 const sprites = new Image();
 sprites.src = '../sprites.png';
 const canvas = document.querySelector('canvas');
@@ -175,7 +163,7 @@ var Jogo;
             this.pares.forEach((par) => {
                 par.x = par.x - 2;
                 if (this.temColisaoComOFlappyBird(par)) {
-                    TrilhasSonoras.find(o => o.tipo === "HIT").Som.play();
+                    TrilhasSonoras.HIT().play();
                     mudaParaTela(Jogo.Telas.GAME_OVER);
                 }
                 if (par.x + this.largura <= 0) {
@@ -218,7 +206,7 @@ var Jogo;
             };
             this.atualiza = () => {
                 if (fazColisao(this, Jogo.Globais.chao)) {
-                    TrilhasSonoras.find(o => o.tipo === "CAIU").Som.play();
+                    TrilhasSonoras.HIT().play();
                     mudaParaTela(Jogo.Telas.GAME_OVER);
                     return;
                 }
@@ -227,7 +215,7 @@ var Jogo;
             };
         }
         pula() {
-            TrilhasSonoras.find(o => o.tipo === "PULO").Som.play();
+            TrilhasSonoras.PULO().play();
             this.velocidade = -this.pulo;
         }
         ;
@@ -266,10 +254,10 @@ var Jogo;
         }
         ;
         atualiza() {
-            const intervaloDeFrames = 20;
+            const intervaloDeFrames = 30;
             const passouOIntervalo = Jogo.frames % intervaloDeFrames === 0;
             if (passouOIntervalo) {
-                TrilhasSonoras.find(o => o.tipo === "PONTO").Som.play();
+                TrilhasSonoras.PONTO().play();
                 this.pontuacao = this.pontuacao + 1;
             }
         }
