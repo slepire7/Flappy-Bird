@@ -6,7 +6,7 @@
     "removeComments": true,
     "noUnusedLocals": true,
     "sourceMap": false,    
-    "target": "ES2021",
+    "target": "ESNext",
     "outDir": "script"
   },  
   "include": [

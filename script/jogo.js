@@ -5,7 +5,7 @@ const TrilhasSonoras = {
     'PONTO': () => new Audio('../asset/efeitos/ponto.wav')
 };
 const sprites = new Image();
-sprites.src = '../sprites.png';
+sprites.src = '../asset/texture/sprites.png';
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
 var Jogo;
@@ -24,10 +24,10 @@ var Jogo;
         return localStorage.getItem(key);
     }
     Jogo.GetStorage = GetStorage;
-    function Draw(Model) {
+    Jogo.Draw = (Model) => {
+        console.log(contexto);
         contexto.drawImage(sprites, Model.spriteX, Model.spriteY, Model.largura, Model.altura, Model.x, Model.y, Model.largura, Model.altura);
-    }
-    Jogo.Draw = Draw;
+    };
     function fazColisao(a, b) {
         let entityA = a;
         let entityB = b;
@@ -55,8 +55,15 @@ var Jogo;
         desenha: () => {
             contexto.fillStyle = '#70c5ce';
             contexto.fillRect(0, 0, canvas.width, canvas.height);
-            Draw(Jogo.planoDeFundo);
-            Draw({
+            Jogo.Draw({
+                spriteX: Jogo.planoDeFundo.spriteX,
+                spriteY: Jogo.planoDeFundo.spriteY,
+                largura: Jogo.planoDeFundo.largura,
+                altura: Jogo.planoDeFundo.altura,
+                x: Jogo.planoDeFundo.x,
+                y: Jogo.planoDeFundo.y
+            });
+            Jogo.Draw({
                 spriteX: Jogo.planoDeFundo.spriteX,
                 spriteY: Jogo.planoDeFundo.spriteY,
                 largura: Jogo.planoDeFundo.largura,
@@ -82,8 +89,15 @@ var Jogo;
             Jogo.chao.x = movimentacao % repeteEm;
         },
         desenha() {
-            Draw(this);
-            Draw({
+            Jogo.Draw({
+                spriteX: this.spriteX,
+                spriteY: this.spriteY,
+                largura: this.largura,
+                altura: this.altura,
+                x: this.x,
+                y: this.y
+            });
+            Jogo.Draw({
                 spriteX: this.spriteX,
                 spriteY: this.spriteY,
                 largura: this.largura,
@@ -94,27 +108,25 @@ var Jogo;
         },
     };
     class Cano {
-        constructor() {
-            this.largura = 52;
-            this.altura = 400;
-            this.chao = {
-                spriteX: 0,
-                spriteY: 169,
-            };
-            this.ceu = {
-                spriteX: 52,
-                spriteY: 169,
-            };
-            this.espaco = 80;
-            this.pares = [];
-        }
+        largura = 52;
+        altura = 400;
+        chao = {
+            spriteX: 0,
+            spriteY: 169,
+        };
+        ceu = {
+            spriteX: 52,
+            spriteY: 169,
+        };
+        espaco = 80;
+        pares = [];
         desenha() {
             this.pares.forEach((par) => {
                 const yRandom = par.y;
                 const espacamentoEntreCanos = 90;
                 const canoCeuX = par.x;
                 const canoCeuY = yRandom;
-                Draw({
+                Jogo.Draw({
                     spriteX: this.ceu.spriteX, spriteY: this.ceu.spriteY,
                     largura: this.largura,
                     altura: this.altura,
@@ -123,7 +135,7 @@ var Jogo;
                 });
                 const canoChaoX = par.x;
                 const canoChaoY = this.altura + espacamentoEntreCanos + yRandom;
-                Draw({
+                Jogo.Draw({
                     spriteX: this.chao.spriteX, spriteY: this.chao.spriteY,
                     largura: this.largura,
                     altura: this.altura,
@@ -177,51 +189,27 @@ var Jogo;
     }
     Jogo.Cano = Cano;
     class flappyBird {
-        constructor() {
-            this.frameAtual = 0;
-            this.spriteX = 0;
-            this.spriteY = 0;
-            this.largura = 33;
-            this.altura = 24;
-            this.x = 10;
-            this.y = 50;
-            this.gravidade = 0.25;
-            this.velocidade = 0;
-            this.pulo = 4.6;
-            this.movimentos = [
-                { spriteX: 0, spriteY: 0, },
-                { spriteX: 0, spriteY: 26, },
-                { spriteX: 0, spriteY: 52, },
-                { spriteX: 0, spriteY: 26, },
-            ];
-            this.desenha = () => {
-                this.atualizaOFrameAtual();
-                const { spriteX, spriteY } = this.movimentos[this.frameAtual];
-                const { altura, largura, x, y, } = this;
-                Draw({
-                    spriteX,
-                    spriteY,
-                    altura,
-                    largura,
-                    x,
-                    y,
-                });
-            };
-            this.atualiza = () => {
-                if (fazColisao(this, Jogo.Globais.chao)) {
-                    TrilhasSonoras.HIT().play();
-                    mudaParaTela(Jogo.Telas.GAME_OVER);
-                    return;
-                }
-                this.velocidade = this.velocidade + this.gravidade;
-                this.y = this.y + this.velocidade;
-            };
-        }
+        frameAtual = 0;
+        spriteX = 0;
+        spriteY = 0;
+        largura = 33;
+        altura = 24;
+        x = 10;
+        y = 50;
+        gravidade = 0.25;
+        velocidade = 0;
+        pulo = 4.6;
         pula() {
             TrilhasSonoras.PULO().play();
             this.velocidade = -this.pulo;
         }
         ;
+        movimentos = [
+            { spriteX: 0, spriteY: 0, },
+            { spriteX: 0, spriteY: 26, },
+            { spriteX: 0, spriteY: 52, },
+            { spriteX: 0, spriteY: 26, },
+        ];
         atualizaOFrameAtual() {
             const intervaloDeFrames = 10;
             const passouOIntervalo = Jogo.frames % intervaloDeFrames === 0;
@@ -233,12 +221,31 @@ var Jogo;
             }
         }
         ;
+        desenha = () => {
+            this.atualizaOFrameAtual();
+            const { spriteX, spriteY } = this.movimentos[this.frameAtual];
+            Jogo.Draw({
+                spriteX: spriteX,
+                spriteY: spriteY,
+                altura: this.altura,
+                largura: this.largura,
+                x: this.x,
+                y: this.y
+            });
+        };
+        atualiza = () => {
+            if (fazColisao(this, Jogo.Globais.chao)) {
+                TrilhasSonoras.HIT().play();
+                mudaParaTela(Jogo.Telas.GAME_OVER);
+                return;
+            }
+            this.velocidade = this.velocidade + this.gravidade;
+            this.y = this.y + this.velocidade;
+        };
     }
     Jogo.flappyBird = flappyBird;
     class Placar {
-        constructor() {
-            this.pontuacao = 0;
-        }
+        pontuacao = 0;
         desenha() {
             contexto.font = '35px "VT323"';
             contexto.textAlign = 'right';
@@ -339,7 +346,14 @@ var Jogo;
         x: (canvas.width / 2) - 174 / 2,
         y: 50,
         desenha() {
-            Draw(this);
+            Jogo.Draw({
+                spriteX: this.spriteX,
+                spriteY: this.spriteY,
+                largura: this.largura,
+                altura: this.altura,
+                x: this.x,
+                y: this.y
+            });
         }
     };
     const mensagemGameOver = {
@@ -350,7 +364,14 @@ var Jogo;
         x: (canvas.width / 2) - 226 / 2,
         y: 50,
         desenha() {
-            Draw(this);
+            Jogo.Draw({
+                spriteX: this.spriteX,
+                spriteY: this.spriteY,
+                largura: this.largura,
+                altura: this.altura,
+                x: this.x,
+                y: this.y
+            });
         }
     };
     const scoreGame = {
@@ -362,7 +383,14 @@ var Jogo;
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.none);
+                Jogo.Draw({
+                    spriteX: scoreGame.none.spriteX,
+                    spriteY: scoreGame.none.spriteY,
+                    largura: scoreGame.none.largura,
+                    altura: scoreGame.none.altura,
+                    x: scoreGame.none.x,
+                    y: scoreGame.none.y
+                });
             }
         },
         bronze: {
@@ -373,7 +401,14 @@ var Jogo;
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.bronze);
+                Jogo.Draw({
+                    spriteX: scoreGame.bronze.spriteX,
+                    spriteY: scoreGame.bronze.spriteY,
+                    largura: scoreGame.bronze.largura,
+                    altura: scoreGame.bronze.altura,
+                    x: scoreGame.bronze.x,
+                    y: scoreGame.bronze.y
+                });
             }
         },
         prata: {
@@ -384,7 +419,14 @@ var Jogo;
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.prata);
+                Jogo.Draw({
+                    spriteX: scoreGame.prata.spriteX,
+                    spriteY: scoreGame.prata.spriteY,
+                    largura: scoreGame.prata.largura,
+                    altura: scoreGame.prata.altura,
+                    x: scoreGame.prata.x,
+                    y: scoreGame.prata.y
+                });
             }
         },
         ouro: {
@@ -395,7 +437,14 @@ var Jogo;
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.ouro);
+                Jogo.Draw({
+                    spriteX: scoreGame.ouro.spriteX,
+                    spriteY: scoreGame.ouro.spriteY,
+                    largura: scoreGame.ouro.largura,
+                    altura: scoreGame.ouro.altura,
+                    x: scoreGame.ouro.x,
+                    y: scoreGame.ouro.y
+                });
             }
         },
         desenha() {

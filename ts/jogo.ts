@@ -6,7 +6,7 @@ const TrilhasSonoras = {
     'PONTO': () => new Audio('../asset/efeitos/ponto.wav')
 }
 const sprites = new Image();
-sprites.src = '../sprites.png';
+sprites.src = '../asset/texture/sprites.png';
 
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
@@ -23,7 +23,8 @@ namespace Jogo {
     export function GetStorage(key: string) {
         return localStorage.getItem(key);
     }
-    export function Draw(Model: IBaseModel) {
+    export const Draw = (Model: IBaseModel) => {
+        console.log(contexto)
         contexto.drawImage(
             sprites,
             Model.spriteX, Model.spriteY,
@@ -57,8 +58,15 @@ namespace Jogo {
         desenha: () => {
             contexto.fillStyle = '#70c5ce';
             contexto.fillRect(0, 0, canvas.width, canvas.height)
-            Draw(planoDeFundo)
-            Draw({
+            Jogo.Draw({
+                spriteX: planoDeFundo.spriteX,
+                spriteY: planoDeFundo.spriteY,
+                largura: planoDeFundo.largura,
+                altura: planoDeFundo.altura,
+                x: planoDeFundo.x,
+                y: planoDeFundo.y
+            })
+            Jogo.Draw({
                 spriteX: planoDeFundo.spriteX,
                 spriteY: planoDeFundo.spriteY,
                 largura: planoDeFundo.largura,
@@ -85,8 +93,15 @@ namespace Jogo {
             chao.x = movimentacao % repeteEm;
         },
         desenha() {
-            Draw(this)
-            Draw({
+            Jogo.Draw({
+                spriteX: this.spriteX,
+                spriteY: this.spriteY,
+                largura: this.largura,
+                altura: this.altura,
+                x: this.x,
+                y: this.y
+            })
+            Jogo.Draw({
                 spriteX: this.spriteX,
                 spriteY: this.spriteY,
                 largura: this.largura,
@@ -116,7 +131,7 @@ namespace Jogo {
                 const canoCeuX = par.x;
                 const canoCeuY = yRandom;
                 // [Cano do Céu]
-                Draw({
+                Jogo.Draw({
                     spriteX: this.ceu.spriteX, spriteY: this.ceu.spriteY,
                     largura: this.largura,
                     altura: this.altura,
@@ -126,7 +141,7 @@ namespace Jogo {
                 // [Cano do Chão]
                 const canoChaoX = par.x;
                 const canoChaoY = this.altura + espacamentoEntreCanos + yRandom;
-                Draw({
+                Jogo.Draw({
                     spriteX: this.chao.spriteX, spriteY: this.chao.spriteY,
                     largura: this.largura,
                     altura: this.altura,
@@ -217,14 +232,13 @@ namespace Jogo {
         desenha: Function = () => {
             this.atualizaOFrameAtual();
             const { spriteX, spriteY } = this.movimentos[this.frameAtual];
-            const { altura, largura, x, y, } = this
-            Draw({
-                spriteX,
-                spriteY,
-                altura,
-                largura,
-                x,
-                y,
+            Jogo.Draw({
+                spriteX: spriteX,
+                spriteY: spriteY,
+                altura: this.altura,
+                largura: this.largura,
+                x: this.x,
+                y: this.y
             });
         };
         atualiza: Function = () => {
@@ -339,7 +353,14 @@ namespace Jogo {
         x: (canvas.width / 2) - 174 / 2,
         y: 50,
         desenha() {
-            Draw(this);
+            Jogo.Draw({
+                spriteX: this.spriteX,
+                spriteY: this.spriteY,
+                largura: this.largura,
+                altura: this.altura,
+                x: this.x,
+                y: this.y
+            });
         }
     }
     const mensagemGameOver: IBaseModel = {
@@ -350,7 +371,14 @@ namespace Jogo {
         x: (canvas.width / 2) - 226 / 2,
         y: 50,
         desenha() {
-            Draw(this)
+            Jogo.Draw({
+                spriteX: this.spriteX,
+                spriteY: this.spriteY,
+                largura: this.largura,
+                altura: this.altura,
+                x: this.x,
+                y: this.y
+            })
         }
     }
     const scoreGame: ScoreGame = {
@@ -362,7 +390,14 @@ namespace Jogo {
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.none)
+                Jogo.Draw({
+                    spriteX: scoreGame.none.spriteX,
+                    spriteY: scoreGame.none.spriteY,
+                    largura: scoreGame.none.largura,
+                    altura: scoreGame.none.altura,
+                    x: scoreGame.none.x,
+                    y: scoreGame.none.y
+                })
             }
         },
         bronze: {
@@ -373,7 +408,14 @@ namespace Jogo {
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.bronze)
+                Jogo.Draw({
+                    spriteX: scoreGame.bronze.spriteX,
+                    spriteY: scoreGame.bronze.spriteY,
+                    largura: scoreGame.bronze.largura,
+                    altura: scoreGame.bronze.altura,
+                    x: scoreGame.bronze.x,
+                    y: scoreGame.bronze.y
+                })
             }
         },
         prata: {
@@ -384,7 +426,14 @@ namespace Jogo {
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.prata)
+                Jogo.Draw({
+                    spriteX: scoreGame.prata.spriteX,
+                    spriteY: scoreGame.prata.spriteY,
+                    largura: scoreGame.prata.largura,
+                    altura: scoreGame.prata.altura,
+                    x: scoreGame.prata.x,
+                    y: scoreGame.prata.y
+                })
             }
         },
         ouro: {
@@ -395,7 +444,14 @@ namespace Jogo {
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.ouro)
+                Jogo.Draw({
+                    spriteX: scoreGame.ouro.spriteX,
+                    spriteY: scoreGame.ouro.spriteY,
+                    largura: scoreGame.ouro.largura,
+                    altura: scoreGame.ouro.altura,
+                    x: scoreGame.ouro.x,
+                    y: scoreGame.ouro.y
+                })
             }
         },
         desenha() {
