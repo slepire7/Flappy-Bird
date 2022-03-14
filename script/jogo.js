@@ -1,6 +1,4 @@
-import { Globais, IBaseModel, ICano, IFlappybird, IPageGame, Movimento, Pages, Dimensoes, ScoreGame, TrilhaSonara } from './utils'
-
-const TrilhasSonoras: TrilhaSonara[] = [
+const TrilhasSonoras = [
     {
         tipo: 'HIT',
         Som: new Audio('../efeitos/hit.wav')
@@ -17,37 +15,31 @@ const TrilhasSonoras: TrilhaSonara[] = [
         tipo: 'PONTO',
         Som: new Audio('../efeitos/ponto.wav')
     },
-]
+];
 const sprites = new Image();
 sprites.src = '../sprites.png';
-
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
-namespace Jogo {
-    export const Globais: Globais = {}
-    export let frames = 0;
+var Jogo;
+(function (Jogo) {
+    Jogo.Globais = {};
+    Jogo.frames = 0;
     const KeyNameStorage = {
         lastPoint: 'FlappyBird1.0Lp',
         bestPoint: 'FlappyBird1.0bp'
-    }
-    function SetStorage(key: string, value: string) {
+    };
+    function SetStorage(key, value) {
         localStorage.setItem(key, value);
     }
-    function GetStorage(key: string) {
+    function GetStorage(key) {
         return localStorage.getItem(key);
     }
-    function Draw(Model: IBaseModel) {
-        contexto.drawImage(
-            sprites,
-            Model.spriteX, Model.spriteY,
-            Model.largura, Model.altura,
-            Model.x, Model.y,
-            Model.largura, Model.altura,
-        )
+    function Draw(Model) {
+        contexto.drawImage(sprites, Model.spriteX, Model.spriteY, Model.largura, Model.altura, Model.x, Model.y, Model.largura, Model.altura);
     }
-    export function fazColisao<A, B>(a: A, b: B) {
-        let entityA = a as unknown as IBaseModel
-        let entityB = b as unknown as IBaseModel
+    function fazColisao(a, b) {
+        let entityA = a;
+        let entityB = b;
         const aY = entityA.y + entityA.altura;
         const bY = entityB.y;
         if (aY >= bY) {
@@ -55,12 +47,14 @@ namespace Jogo {
         }
         return false;
     }
-    export function mudaParaTela(page: IPageGame) {
+    Jogo.fazColisao = fazColisao;
+    function mudaParaTela(page) {
         Jogo.TelaAtiva = page;
         if (Jogo.TelaAtiva.inicializa)
             Jogo.TelaAtiva.inicializa();
     }
-    const planoDeFundo: IBaseModel = {
+    Jogo.mudaParaTela = mudaParaTela;
+    const planoDeFundo = {
         spriteX: 390,
         spriteY: 0,
         largura: 275,
@@ -69,8 +63,8 @@ namespace Jogo {
         y: canvas.height - 204,
         desenha: () => {
             contexto.fillStyle = '#70c5ce';
-            contexto.fillRect(0, 0, canvas.width, canvas.height)
-            Draw(planoDeFundo)
+            contexto.fillRect(0, 0, canvas.width, canvas.height);
+            Draw(planoDeFundo);
             Draw({
                 spriteX: planoDeFundo.spriteX,
                 spriteY: planoDeFundo.spriteY,
@@ -78,13 +72,12 @@ namespace Jogo {
                 altura: planoDeFundo.altura,
                 x: (planoDeFundo.x + planoDeFundo.largura),
                 y: planoDeFundo.y
-            })
+            });
         },
-        atualiza(): void {
+        atualiza() {
         }
-
-    }
-    const chao: IBaseModel = {
+    };
+    const chao = {
         spriteX: 0,
         spriteY: 610,
         largura: 224,
@@ -98,7 +91,7 @@ namespace Jogo {
             chao.x = movimentacao % repeteEm;
         },
         desenha() {
-            Draw(this)
+            Draw(this);
             Draw({
                 spriteX: this.spriteX,
                 spriteY: this.spriteY,
@@ -108,35 +101,35 @@ namespace Jogo {
                 y: this.y
             });
         },
-    }
-    export class Cano implements ICano {
-        largura: number = 52;
-        altura: number = 400;
-        chao: Movimento = {
-            spriteX: 0,
-            spriteY: 169,
-        };
-        ceu: Movimento = {
-            spriteX: 52,
-            spriteY: 169,
-        };
-        espaco: number = 80;
-        pares: Dimensoes[] = [];
+    };
+    class Cano {
+        constructor() {
+            this.largura = 52;
+            this.altura = 400;
+            this.chao = {
+                spriteX: 0,
+                spriteY: 169,
+            };
+            this.ceu = {
+                spriteX: 52,
+                spriteY: 169,
+            };
+            this.espaco = 80;
+            this.pares = [];
+        }
         desenha() {
             this.pares.forEach((par) => {
                 const yRandom = par.y;
                 const espacamentoEntreCanos = 90;
                 const canoCeuX = par.x;
                 const canoCeuY = yRandom;
-                // [Cano do Céu]
                 Draw({
                     spriteX: this.ceu.spriteX, spriteY: this.ceu.spriteY,
                     largura: this.largura,
                     altura: this.altura,
                     x: canoCeuX,
                     y: canoCeuY,
-                })
-                // [Cano do Chão]
+                });
                 const canoChaoX = par.x;
                 const canoChaoY = this.altura + espacamentoEntreCanos + yRandom;
                 Draw({
@@ -149,137 +142,140 @@ namespace Jogo {
                 par.canoCeu = {
                     x: canoCeuX,
                     y: this.altura + canoCeuY
-                }
+                };
                 par.canoChao = {
                     x: canoChaoX,
                     y: canoChaoY
-                }
-            })
-        };
-        temColisaoComOFlappyBird(par: Dimensoes) {
-            const cabecaDoFlappy = Globais.flappyBird.y;
-            const peDoFlappy = Globais.flappyBird.y + Globais.flappyBird.altura;
-            if ((Globais.flappyBird.x + Globais.flappyBird.largura) >= par.x) {
+                };
+            });
+        }
+        ;
+        temColisaoComOFlappyBird(par) {
+            const cabecaDoFlappy = Jogo.Globais.flappyBird.y;
+            const peDoFlappy = Jogo.Globais.flappyBird.y + Jogo.Globais.flappyBird.altura;
+            if ((Jogo.Globais.flappyBird.x + Jogo.Globais.flappyBird.largura) >= par.x) {
                 if (cabecaDoFlappy <= par.canoCeu.y) {
                     return true;
                 }
-
                 if (peDoFlappy >= par.canoChao.y) {
                     return true;
                 }
             }
             return false;
-        };
+        }
+        ;
         atualiza() {
-            const passou100Frames = frames % 100 === 0;
+            const passou100Frames = Jogo.frames % 100 === 0;
             if (passou100Frames) {
                 this.pares.push({
                     x: canvas.width,
                     y: -150 * (Math.random() + 1),
                 });
             }
-
             this.pares.forEach((par) => {
                 par.x = par.x - 2;
-
                 if (this.temColisaoComOFlappyBird(par)) {
                     TrilhasSonoras.find(o => o.tipo === "HIT").Som.play();
-                    mudaParaTela(Telas.GAME_OVER);
+                    mudaParaTela(Jogo.Telas.GAME_OVER);
                 }
-
                 if (par.x + this.largura <= 0) {
                     this.pares.shift();
                 }
             });
-
         }
-
     }
-    export class flappyBird implements IFlappybird {
-        public frameAtual: number = 0;
-        public spriteX: number = 0;
-        public spriteY: number = 0;
-        public largura: number = 33;
-        public altura: number = 24;
-        public x: number = 10;
-        public y: number = 50;
-        public gravidade: number = 0.25;
-        public velocidade: number = 0;
-        public pulo: number = 4.6;
+    Jogo.Cano = Cano;
+    class flappyBird {
+        constructor() {
+            this.frameAtual = 0;
+            this.spriteX = 0;
+            this.spriteY = 0;
+            this.largura = 33;
+            this.altura = 24;
+            this.x = 10;
+            this.y = 50;
+            this.gravidade = 0.25;
+            this.velocidade = 0;
+            this.pulo = 4.6;
+            this.movimentos = [
+                { spriteX: 0, spriteY: 0, },
+                { spriteX: 0, spriteY: 26, },
+                { spriteX: 0, spriteY: 52, },
+                { spriteX: 0, spriteY: 26, },
+            ];
+            this.desenha = () => {
+                this.atualizaOFrameAtual();
+                const { spriteX, spriteY } = this.movimentos[this.frameAtual];
+                const { altura, largura, x, y, } = this;
+                Draw({
+                    spriteX,
+                    spriteY,
+                    altura,
+                    largura,
+                    x,
+                    y,
+                });
+            };
+            this.atualiza = () => {
+                if (fazColisao(this, Jogo.Globais.chao)) {
+                    TrilhasSonoras.find(o => o.tipo === "CAIU").Som.play();
+                    mudaParaTela(Jogo.Telas.GAME_OVER);
+                    return;
+                }
+                this.velocidade = this.velocidade + this.gravidade;
+                this.y = this.y + this.velocidade;
+            };
+        }
         pula() {
-            TrilhasSonoras.find(o => o.tipo === "PULO").Som.play()
-            this.velocidade = - this.pulo
-        };
-        movimentos: Movimento[] = [
-            { spriteX: 0, spriteY: 0, }, // asa pra cima
-            { spriteX: 0, spriteY: 26, }, // asa no meio 
-            { spriteX: 0, spriteY: 52, }, // asa pra baixo
-            { spriteX: 0, spriteY: 26, }, // asa no meio 
-        ];
+            TrilhasSonoras.find(o => o.tipo === "PULO").Som.play();
+            this.velocidade = -this.pulo;
+        }
+        ;
         atualizaOFrameAtual() {
             const intervaloDeFrames = 10;
-            const passouOIntervalo = frames % intervaloDeFrames === 0;
-
+            const passouOIntervalo = Jogo.frames % intervaloDeFrames === 0;
             if (passouOIntervalo) {
                 const baseDoIncremento = 1;
                 const incremento = baseDoIncremento + this.frameAtual;
                 const baseRepeticao = this.movimentos.length;
-                this.frameAtual = incremento % baseRepeticao
+                this.frameAtual = incremento % baseRepeticao;
             }
-        };
-        desenha: Function = () => {
-            this.atualizaOFrameAtual();
-            const { spriteX, spriteY } = this.movimentos[this.frameAtual];
-            const { altura, largura, x, y, } = this
-            Draw({
-                spriteX,
-                spriteY,
-                altura,
-                largura,
-                x,
-                y,
-            });
-        };
-        atualiza: Function = () => {
-            if (fazColisao<flappyBird, any>(this, Jogo.Globais.chao)) {
-                TrilhasSonoras.find(o => o.tipo === "CAIU").Som.play()
-                mudaParaTela(Telas.GAME_OVER);
-                return;
-            }
-
-            this.velocidade = this.velocidade + this.gravidade;
-            this.y = this.y + this.velocidade;
         }
+        ;
     }
-    export class Placar {
-        pontuacao: number = 0;
+    Jogo.flappyBird = flappyBird;
+    class Placar {
+        constructor() {
+            this.pontuacao = 0;
+        }
         desenha() {
             contexto.font = '35px "VT323"';
             contexto.textAlign = 'right';
             contexto.fillStyle = 'white';
             contexto.fillText(`${this.pontuacao}`, canvas.width - 10, 35);
-            SetStorage(KeyNameStorage["lastPoint"], this.pontuacao.toString())
+            SetStorage(KeyNameStorage["lastPoint"], this.pontuacao.toString());
             let bestP = Number(GetStorage(KeyNameStorage["bestPoint"]));
             if (bestP === 0) {
-                SetStorage(KeyNameStorage["bestPoint"], this.pontuacao.toString())
-            } else {
+                SetStorage(KeyNameStorage["bestPoint"], this.pontuacao.toString());
+            }
+            else {
                 let lastP = Number(GetStorage(KeyNameStorage["lastPoint"]));
                 if (lastP > bestP)
-                    SetStorage(KeyNameStorage["bestPoint"], this.pontuacao.toString())
+                    SetStorage(KeyNameStorage["bestPoint"], this.pontuacao.toString());
             }
-        };
+        }
+        ;
         atualiza() {
             const intervaloDeFrames = 20;
-            const passouOIntervalo = frames % intervaloDeFrames === 0;
-
+            const passouOIntervalo = Jogo.frames % intervaloDeFrames === 0;
             if (passouOIntervalo) {
                 TrilhasSonoras.find(o => o.tipo === "PONTO").Som.play();
                 this.pontuacao = this.pontuacao + 1;
             }
         }
-
     }
-    export let TelaAtiva: IPageGame = {
+    Jogo.Placar = Placar;
+    Jogo.TelaAtiva = {
         click: () => {
         },
         atualiza: () => {
@@ -288,46 +284,46 @@ namespace Jogo {
         },
         inicializa: () => {
         }
-    }
-    export const Telas: Pages = {
+    };
+    Jogo.Telas = {
         INICIO: {
             inicializa() {
-                Globais.flappyBird = new Jogo.flappyBird();
-                Globais.chao = chao;
-                Globais.canos = new Jogo.Cano();
+                Jogo.Globais.flappyBird = new Jogo.flappyBird();
+                Jogo.Globais.chao = chao;
+                Jogo.Globais.canos = new Jogo.Cano();
             },
             desenha() {
                 planoDeFundo.desenha();
-                Globais.flappyBird.desenha();
-                Globais.chao.desenha();
+                Jogo.Globais.flappyBird.desenha();
+                Jogo.Globais.chao.desenha();
                 mensagemGetReady.desenha();
             },
             click() {
-                mudaParaTela(Telas.JOGO);
+                mudaParaTela(Jogo.Telas.JOGO);
             },
             atualiza() {
-                Globais.chao.atualiza();
+                Jogo.Globais.chao.atualiza();
             }
         },
         JOGO: {
             inicializa() {
-                Globais.placar = new Placar();
+                Jogo.Globais.placar = new Placar();
             },
             desenha() {
                 planoDeFundo.desenha();
-                Globais.canos.desenha();
-                Globais.chao.desenha();
-                Globais.flappyBird.desenha();
-                Globais.placar.desenha();
+                Jogo.Globais.canos.desenha();
+                Jogo.Globais.chao.desenha();
+                Jogo.Globais.flappyBird.desenha();
+                Jogo.Globais.placar.desenha();
             },
             click() {
-                Globais.flappyBird.pula();
+                Jogo.Globais.flappyBird.pula();
             },
             atualiza() {
-                Globais.canos.atualiza();
-                Globais.chao.atualiza();
-                Globais.flappyBird.atualiza();
-                Globais.placar.atualiza();
+                Jogo.Globais.canos.atualiza();
+                Jogo.Globais.chao.atualiza();
+                Jogo.Globais.flappyBird.atualiza();
+                Jogo.Globais.placar.atualiza();
             }
         },
         GAME_OVER: {
@@ -338,14 +334,13 @@ namespace Jogo {
                 scoreGame.desenha();
             },
             atualiza() {
-
             },
             click() {
-                mudaParaTela(Telas.INICIO);
+                mudaParaTela(Jogo.Telas.INICIO);
             }
         }
-    }
-    const mensagemGetReady: IBaseModel = {
+    };
+    const mensagemGetReady = {
         spriteX: 134,
         spriteY: 0,
         largura: 174,
@@ -355,8 +350,8 @@ namespace Jogo {
         desenha() {
             Draw(this);
         }
-    }
-    const mensagemGameOver: IBaseModel = {
+    };
+    const mensagemGameOver = {
         spriteX: 134,
         spriteY: 153,
         largura: 226,
@@ -364,10 +359,10 @@ namespace Jogo {
         x: (canvas.width / 2) - 226 / 2,
         y: 50,
         desenha() {
-            Draw(this)
+            Draw(this);
         }
-    }
-    const scoreGame: ScoreGame = {
+    };
+    const scoreGame = {
         none: {
             spriteX: 0,
             spriteY: 78,
@@ -376,7 +371,7 @@ namespace Jogo {
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.none)
+                Draw(scoreGame.none);
             }
         },
         bronze: {
@@ -387,7 +382,7 @@ namespace Jogo {
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.bronze)
+                Draw(scoreGame.bronze);
             }
         },
         prata: {
@@ -398,7 +393,7 @@ namespace Jogo {
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.prata)
+                Draw(scoreGame.prata);
             }
         },
         ouro: {
@@ -409,7 +404,7 @@ namespace Jogo {
             x: (canvas.width / 2) / 2.4,
             y: 135,
             desenha() {
-                Draw(scoreGame.ouro)
+                Draw(scoreGame.ouro);
             }
         },
         desenha() {
@@ -434,25 +429,23 @@ namespace Jogo {
                 return;
             }
         }
-    }
-}
+    };
+})(Jogo || (Jogo = {}));
 function loop() {
     Jogo.TelaAtiva.desenha();
     Jogo.TelaAtiva.atualiza();
     Jogo.frames = Jogo.frames + 1;
     requestAnimationFrame(loop);
 }
-
-
 window.addEventListener('click', function () {
     if (Jogo.TelaAtiva.click) {
         Jogo.TelaAtiva.click();
     }
 });
-window.addEventListener('keypress', function (e: KeyboardEvent) {
+window.addEventListener('keypress', function (e) {
     if (Jogo.TelaAtiva.click)
-        Jogo.TelaAtiva.click()
-})
-
+        Jogo.TelaAtiva.click();
+});
 Jogo.mudaParaTela(Jogo.Telas.INICIO);
 loop();
+export {};
