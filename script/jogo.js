@@ -1,11 +1,11 @@
 const TrilhasSonoras = {
-    "HIT": () => new Audio('../asset/efeitos/hit.wav'),
-    'PULO': () => new Audio('../asset/efeitos/hit.wav'),
-    'CAIU': () => new Audio('../asset/efeitos/caiu.wav'),
-    'PONTO': () => new Audio('../asset/efeitos/ponto.wav')
+    "HIT": () => new Audio('../assets/efeitos/hit.wav'),
+    'PULO': () => new Audio('../assets/efeitos/hit.wav'),
+    'CAIU': () => new Audio('../assets/efeitos/caiu.wav'),
+    'PONTO': () => new Audio('../assets/efeitos/ponto.wav')
 };
 const sprites = new Image();
-sprites.src = '../asset/texture/sprites.png';
+sprites.src = '../assets/texture/sprites.png';
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
 var Jogo;
@@ -90,20 +90,20 @@ var Jogo;
         },
         desenha() {
             Jogo.Draw({
-                spriteX: this.spriteX,
-                spriteY: this.spriteY,
-                largura: this.largura,
-                altura: this.altura,
-                x: this.x,
-                y: this.y
+                spriteX: Jogo.chao.spriteX,
+                spriteY: Jogo.chao.spriteY,
+                largura: Jogo.chao.largura,
+                altura: Jogo.chao.altura,
+                x: Jogo.chao.x,
+                y: Jogo.chao.y
             });
             Jogo.Draw({
-                spriteX: this.spriteX,
-                spriteY: this.spriteY,
-                largura: this.largura,
-                altura: this.altura,
-                x: (this.x + this.largura),
-                y: this.y
+                spriteX: Jogo.chao.spriteX,
+                spriteY: Jogo.chao.spriteY,
+                largura: Jogo.chao.largura,
+                altura: Jogo.chao.altura,
+                x: (Jogo.chao.x + Jogo.chao.largura),
+                y: Jogo.chao.y
             });
         },
     };
@@ -127,7 +127,8 @@ var Jogo;
                 const canoCeuX = par.x;
                 const canoCeuY = yRandom;
                 Jogo.Draw({
-                    spriteX: this.ceu.spriteX, spriteY: this.ceu.spriteY,
+                    spriteX: this.ceu.spriteX,
+                    spriteY: this.ceu.spriteY,
                     largura: this.largura,
                     altura: this.altura,
                     x: canoCeuX,
@@ -136,7 +137,8 @@ var Jogo;
                 const canoChaoX = par.x;
                 const canoChaoY = this.altura + espacamentoEntreCanos + yRandom;
                 Jogo.Draw({
-                    spriteX: this.chao.spriteX, spriteY: this.chao.spriteY,
+                    spriteX: this.chao.spriteX,
+                    spriteY: this.chao.spriteY,
                     largura: this.largura,
                     altura: this.altura,
                     x: canoChaoX,
@@ -345,14 +347,14 @@ var Jogo;
         altura: 152,
         x: (canvas.width / 2) - 174 / 2,
         y: 50,
-        desenha() {
+        desenha: () => {
             Jogo.Draw({
-                spriteX: this.spriteX,
-                spriteY: this.spriteY,
-                largura: this.largura,
-                altura: this.altura,
-                x: this.x,
-                y: this.y
+                spriteX: mensagemGetReady.spriteX,
+                spriteY: mensagemGetReady.spriteY,
+                largura: mensagemGetReady.largura,
+                altura: mensagemGetReady.altura,
+                x: mensagemGetReady.x,
+                y: mensagemGetReady.y
             });
         }
     };
@@ -365,12 +367,12 @@ var Jogo;
         y: 50,
         desenha() {
             Jogo.Draw({
-                spriteX: this.spriteX,
-                spriteY: this.spriteY,
-                largura: this.largura,
-                altura: this.altura,
-                x: this.x,
-                y: this.y
+                spriteX: mensagemGameOver.spriteX,
+                spriteY: mensagemGameOver.spriteY,
+                largura: mensagemGameOver.largura,
+                altura: mensagemGameOver.altura,
+                x: mensagemGameOver.x,
+                y: mensagemGameOver.y
             });
         }
     };

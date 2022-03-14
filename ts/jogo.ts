@@ -94,20 +94,20 @@ namespace Jogo {
         },
         desenha() {
             Jogo.Draw({
-                spriteX: this.spriteX,
-                spriteY: this.spriteY,
-                largura: this.largura,
-                altura: this.altura,
-                x: this.x,
-                y: this.y
+                spriteX: chao.spriteX,
+                spriteY: chao.spriteY,
+                largura: chao.largura,
+                altura: chao.altura,
+                x: chao.x,
+                y: chao.y
             })
             Jogo.Draw({
-                spriteX: this.spriteX,
-                spriteY: this.spriteY,
-                largura: this.largura,
-                altura: this.altura,
-                x: (this.x + this.largura),
-                y: this.y
+                spriteX: chao.spriteX,
+                spriteY: chao.spriteY,
+                largura: chao.largura,
+                altura: chao.altura,
+                x: (chao.x + chao.largura),
+                y: chao.y
             });
         },
     }
@@ -132,7 +132,8 @@ namespace Jogo {
                 const canoCeuY = yRandom;
                 // [Cano do Céu]
                 Jogo.Draw({
-                    spriteX: this.ceu.spriteX, spriteY: this.ceu.spriteY,
+                    spriteX: this.ceu.spriteX,
+                    spriteY: this.ceu.spriteY,
                     largura: this.largura,
                     altura: this.altura,
                     x: canoCeuX,
@@ -142,7 +143,8 @@ namespace Jogo {
                 const canoChaoX = par.x;
                 const canoChaoY = this.altura + espacamentoEntreCanos + yRandom;
                 Jogo.Draw({
-                    spriteX: this.chao.spriteX, spriteY: this.chao.spriteY,
+                    spriteX: this.chao.spriteX,
+                    spriteY: this.chao.spriteY,
                     largura: this.largura,
                     altura: this.altura,
                     x: canoChaoX,
@@ -352,14 +354,14 @@ namespace Jogo {
         altura: 152,
         x: (canvas.width / 2) - 174 / 2,
         y: 50,
-        desenha() {
+        desenha: () => {
             Jogo.Draw({
-                spriteX: this.spriteX,
-                spriteY: this.spriteY,
-                largura: this.largura,
-                altura: this.altura,
-                x: this.x,
-                y: this.y
+                spriteX: mensagemGetReady.spriteX,
+                spriteY: mensagemGetReady.spriteY,
+                largura: mensagemGetReady.largura,
+                altura: mensagemGetReady.altura,
+                x: mensagemGetReady.x,
+                y: mensagemGetReady.y
             });
         }
     }
@@ -372,12 +374,12 @@ namespace Jogo {
         y: 50,
         desenha() {
             Jogo.Draw({
-                spriteX: this.spriteX,
-                spriteY: this.spriteY,
-                largura: this.largura,
-                altura: this.altura,
-                x: this.x,
-                y: this.y
+                spriteX: mensagemGameOver.spriteX,
+                spriteY: mensagemGameOver.spriteY,
+                largura: mensagemGameOver.largura,
+                altura: mensagemGameOver.altura,
+                x: mensagemGameOver.x,
+                y: mensagemGameOver.y
             })
         }
     }
