@@ -1,19 +1,19 @@
 const TrilhasSonoras = [
     {
         tipo: 'HIT',
-        Som: new Audio('../efeitos/hit.wav')
+        Som: new Audio('../asset/efeitos/hit.wav')
     },
     {
         tipo: 'PULO',
-        Som: new Audio('../efeitos/pulo.wav')
+        Som: new Audio('../asset/efeitos/pulo.wav')
     },
     {
         tipo: 'CAIU',
-        Som: new Audio('../efeitos/caiu.wav')
+        Som: new Audio('../asset/efeitos/caiu.wav')
     },
     {
         tipo: 'PONTO',
-        Som: new Audio('../efeitos/ponto.wav')
+        Som: new Audio('../asset/efeitos/ponto.wav')
     },
 ];
 const sprites = new Image();
