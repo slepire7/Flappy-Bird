@@ -1,11 +1,11 @@
 const TrilhasSonoras = {
-    "HIT": () => new Audio('../assets/efeitos/hit.wav'),
-    'PULO': () => new Audio('../assets/efeitos/hit.wav'),
-    'CAIU': () => new Audio('../assets/efeitos/caiu.wav'),
-    'PONTO': () => new Audio('../assets/efeitos/ponto.wav')
+    "HIT": () => new Audio('../docs/assets/efeitos/hit.wav'),
+    'PULO': () => new Audio('../docs/assets/efeitos/hit.wav'),
+    'CAIU': () => new Audio('../docs/assets/efeitos/caiu.wav'),
+    'PONTO': () => new Audio('../docs/assets/efeitos/ponto.wav')
 };
 const sprites = new Image();
-sprites.src = '../assets/texture/sprites.png';
+sprites.src = '../docs/assets/texture/sprites.png';
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
 var Jogo;
