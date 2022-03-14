@@ -13,17 +13,17 @@ const contexto = canvas.getContext('2d');
 namespace Jogo {
     export const Globais: Globais = {}
     export let frames = 0;
-    const KeyNameStorage = {
+    export const KeyNameStorage = {
         lastPoint: 'FlappyBird1.0Lp',
         bestPoint: 'FlappyBird1.0bp'
     }
-    function SetStorage(key: string, value: string) {
+    export function SetStorage(key: string, value: string) {
         localStorage.setItem(key, value);
     }
-    function GetStorage(key: string) {
+    export function GetStorage(key: string) {
         return localStorage.getItem(key);
     }
-    function Draw(Model: IBaseModel) {
+    export function Draw(Model: IBaseModel) {
         contexto.drawImage(
             sprites,
             Model.spriteX, Model.spriteY,
@@ -47,7 +47,7 @@ namespace Jogo {
         if (Jogo.TelaAtiva.inicializa)
             Jogo.TelaAtiva.inicializa();
     }
-    const planoDeFundo: IBaseModel = {
+    export const planoDeFundo: IBaseModel = {
         spriteX: 390,
         spriteY: 0,
         largura: 275,
@@ -71,7 +71,7 @@ namespace Jogo {
         }
 
     }
-    const chao: IBaseModel = {
+    export const chao: IBaseModel = {
         spriteX: 0,
         spriteY: 610,
         largura: 224,

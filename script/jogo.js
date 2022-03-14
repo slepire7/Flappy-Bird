@@ -12,19 +12,22 @@ var Jogo;
 (function (Jogo) {
     Jogo.Globais = {};
     Jogo.frames = 0;
-    const KeyNameStorage = {
+    Jogo.KeyNameStorage = {
         lastPoint: 'FlappyBird1.0Lp',
         bestPoint: 'FlappyBird1.0bp'
     };
     function SetStorage(key, value) {
         localStorage.setItem(key, value);
     }
+    Jogo.SetStorage = SetStorage;
     function GetStorage(key) {
         return localStorage.getItem(key);
     }
+    Jogo.GetStorage = GetStorage;
     function Draw(Model) {
         contexto.drawImage(sprites, Model.spriteX, Model.spriteY, Model.largura, Model.altura, Model.x, Model.y, Model.largura, Model.altura);
     }
+    Jogo.Draw = Draw;
     function fazColisao(a, b) {
         let entityA = a;
         let entityB = b;
@@ -42,7 +45,7 @@ var Jogo;
             Jogo.TelaAtiva.inicializa();
     }
     Jogo.mudaParaTela = mudaParaTela;
-    const planoDeFundo = {
+    Jogo.planoDeFundo = {
         spriteX: 390,
         spriteY: 0,
         largura: 275,
@@ -52,20 +55,20 @@ var Jogo;
         desenha: () => {
             contexto.fillStyle = '#70c5ce';
             contexto.fillRect(0, 0, canvas.width, canvas.height);
-            Draw(planoDeFundo);
+            Draw(Jogo.planoDeFundo);
             Draw({
-                spriteX: planoDeFundo.spriteX,
-                spriteY: planoDeFundo.spriteY,
-                largura: planoDeFundo.largura,
-                altura: planoDeFundo.altura,
-                x: (planoDeFundo.x + planoDeFundo.largura),
-                y: planoDeFundo.y
+                spriteX: Jogo.planoDeFundo.spriteX,
+                spriteY: Jogo.planoDeFundo.spriteY,
+                largura: Jogo.planoDeFundo.largura,
+                altura: Jogo.planoDeFundo.altura,
+                x: (Jogo.planoDeFundo.x + Jogo.planoDeFundo.largura),
+                y: Jogo.planoDeFundo.y
             });
         },
         atualiza() {
         }
     };
-    const chao = {
+    Jogo.chao = {
         spriteX: 0,
         spriteY: 610,
         largura: 224,
@@ -74,9 +77,9 @@ var Jogo;
         y: canvas.height - 112,
         atualiza() {
             const movimentoDoChao = 1;
-            const repeteEm = chao.largura / 2;
-            const movimentacao = chao.x - movimentoDoChao;
-            chao.x = movimentacao % repeteEm;
+            const repeteEm = Jogo.chao.largura / 2;
+            const movimentacao = Jogo.chao.x - movimentoDoChao;
+            Jogo.chao.x = movimentacao % repeteEm;
         },
         desenha() {
             Draw(this);
@@ -241,15 +244,15 @@ var Jogo;
             contexto.textAlign = 'right';
             contexto.fillStyle = 'white';
             contexto.fillText(`${this.pontuacao}`, canvas.width - 10, 35);
-            SetStorage(KeyNameStorage["lastPoint"], this.pontuacao.toString());
-            let bestP = Number(GetStorage(KeyNameStorage["bestPoint"]));
+            SetStorage(Jogo.KeyNameStorage["lastPoint"], this.pontuacao.toString());
+            let bestP = Number(GetStorage(Jogo.KeyNameStorage["bestPoint"]));
             if (bestP === 0) {
-                SetStorage(KeyNameStorage["bestPoint"], this.pontuacao.toString());
+                SetStorage(Jogo.KeyNameStorage["bestPoint"], this.pontuacao.toString());
             }
             else {
-                let lastP = Number(GetStorage(KeyNameStorage["lastPoint"]));
+                let lastP = Number(GetStorage(Jogo.KeyNameStorage["lastPoint"]));
                 if (lastP > bestP)
-                    SetStorage(KeyNameStorage["bestPoint"], this.pontuacao.toString());
+                    SetStorage(Jogo.KeyNameStorage["bestPoint"], this.pontuacao.toString());
             }
         }
         ;
@@ -277,11 +280,11 @@ var Jogo;
         INICIO: {
             inicializa() {
                 Jogo.Globais.flappyBird = new Jogo.flappyBird();
-                Jogo.Globais.chao = chao;
+                Jogo.Globais.chao = Jogo.chao;
                 Jogo.Globais.canos = new Jogo.Cano();
             },
             desenha() {
-                planoDeFundo.desenha();
+                Jogo.planoDeFundo.desenha();
                 Jogo.Globais.flappyBird.desenha();
                 Jogo.Globais.chao.desenha();
                 mensagemGetReady.desenha();
@@ -298,7 +301,7 @@ var Jogo;
                 Jogo.Globais.placar = new Placar();
             },
             desenha() {
-                planoDeFundo.desenha();
+                Jogo.planoDeFundo.desenha();
                 Jogo.Globais.canos.desenha();
                 Jogo.Globais.chao.desenha();
                 Jogo.Globais.flappyBird.desenha();
@@ -396,8 +399,8 @@ var Jogo;
             }
         },
         desenha() {
-            const pontuacaoAtual = Number(GetStorage(KeyNameStorage["lastPoint"]));
-            const bestPontuacao = Number(GetStorage(KeyNameStorage["bestPoint"]));
+            const pontuacaoAtual = Number(GetStorage(Jogo.KeyNameStorage["lastPoint"]));
+            const bestPontuacao = Number(GetStorage(Jogo.KeyNameStorage["bestPoint"]));
             contexto.fillText(`${pontuacaoAtual}`, (canvas.width / 3) * 2.4, 147);
             contexto.fillText(`${bestPontuacao}`, (canvas.width / 3) * 2.4, (canvas.width / 3) * 1.9);
             if (pontuacaoAtual < 50) {
