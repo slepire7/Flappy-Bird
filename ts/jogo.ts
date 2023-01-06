@@ -210,9 +210,9 @@ namespace Jogo {
         public y: number = 50;
         public gravidade: number = 0.25;
         public velocidade: number = 0;
-        public pulo: number = 4.6;
+        public pulo: number = 4;
         pula() {
-            TrilhasSonoras.PULO().play()
+            TrilhasSonoras.PULO().play();
             this.velocidade = - this.pulo
         };
         movimentos: Movimento[] = [

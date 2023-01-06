@@ -201,7 +201,7 @@ var Jogo;
         y = 50;
         gravidade = 0.25;
         velocidade = 0;
-        pulo = 4.6;
+        pulo = 4;
         pula() {
             TrilhasSonoras.PULO().play();
             this.velocidade = -this.pulo;
