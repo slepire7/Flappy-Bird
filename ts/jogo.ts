@@ -1,12 +1,13 @@
 import { Globais, IBaseModel, ICano, IFlappybird, IPageGame, Movimento, Pages, Dimensoes, ScoreGame } from './utils'
+const isDeveloper = window.location.hostname.includes('localhost');
 const TrilhasSonoras = {
-    "HIT": () => new Audio('../assets/efeitos/hit.wav'),
-    'PULO': () => new Audio('../assets/efeitos/hit.wav'),
-    'CAIU': () => new Audio('../assets/efeitos/caiu.wav'),
-    'PONTO': () => new Audio('../assets/efeitos/ponto.wav')
+    "HIT": () => new Audio(`${isDeveloper == false ? '../Flappy-Bird/' : '../'}assets/efeitos/hit.wav`),
+    'PULO': () => new Audio(`${isDeveloper == false ? '../Flappy-Bird/' : '../'}assets/efeitos/pulo.wav`),
+    'CAIU': () => new Audio(`${isDeveloper == false ? '../Flappy-Bird/' : '../'}assets/efeitos/caiu.wav`),
+    'PONTO': () => new Audio(`${isDeveloper == false ? '../Flappy-Bird/' : '../'}assets/efeitos/ponto.wav`)
 }
 const sprites = new Image();
-sprites.src = '../assets/texture/sprites.png';
+sprites.src = `${isDeveloper == false ? '../Flappy-Bird/' : '../'}assets/texture/sprites.png`;
 
 const canvas = document.querySelector('canvas');
 const contexto = canvas.getContext('2d');
