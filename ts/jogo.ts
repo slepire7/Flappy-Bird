@@ -275,7 +275,7 @@ namespace Jogo {
             const passouOIntervalo = frames % intervaloDeFrames === 0;
 
             if (passouOIntervalo) {
-                TrilhasSonoras.PONTO().play();
+                //TrilhasSonoras.PONTO().play();
                 this.pontuacao = this.pontuacao + 1;
             }
         }

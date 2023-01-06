@@ -269,7 +269,6 @@ var Jogo;
             const intervaloDeFrames = 30;
             const passouOIntervalo = Jogo.frames % intervaloDeFrames === 0;
             if (passouOIntervalo) {
-                TrilhasSonoras.PONTO().play();
                 this.pontuacao = this.pontuacao + 1;
             }
         }
