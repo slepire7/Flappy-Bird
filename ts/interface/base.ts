@@ -1,21 +1,15 @@
 export type Globais = {
-    flappyBird?: any;
-    chao?: any;
-    canos?: any;
-    placar?: any;
+    flappyBird?: IFlappybird;
+    chao?: IBaseModel;
+    canos?: ICano;
+    placar?: IPlacar;
 }
 export type Pages = {
     INICIO: IPageGame;
     JOGO: IPageGame;
     GAME_OVER: IPageGame;
 }
-export type ScoreGame = {
-    none: IBaseModel
-    bronze: IBaseModel
-    prata: IBaseModel
-    ouro: IBaseModel
-    desenha: Function
-}
+
 export type TypeTrilha = "HIT" | "PULO" | "CAIU" | "PONTO";
 export interface IBaseModel extends IBaseAction {
     spriteX: number
@@ -26,10 +20,10 @@ export interface IBaseModel extends IBaseAction {
     y: number
 }
 export interface IPageGame {
-    click: Function
-    atualiza: Function
-    desenha: Function
-    inicializa: Function
+    click?: Function
+    atualiza?: Function
+    desenha?: Function
+    inicializa?: Function
 }
 export interface IFlappybird extends IBaseModel {
     gravidade: number
@@ -47,7 +41,7 @@ export interface ICano extends IBaseAction {
     ceu: Movimento
     espaco: number,
     pares: Dimensoes[]
-    temColisaoComOFlappyBird(par: Dimensoes): boolean
+    temColisaoComOFlappyBird(par: Dimensoes, _flappyBird: IFlappybird): boolean
 }
 export interface IBaseAction {
     desenha?: Function
@@ -68,4 +62,9 @@ export interface Dimensoes {
         x: number
         y: number
     }
+}
+export interface IPlacar {
+    pontuacao: number;
+    desenha: Function
+    atualiza: Function
 }

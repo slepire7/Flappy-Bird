@@ -4,13 +4,29 @@
   "description": "",
   "main": "jogo.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "tsc": "tsc"
+    "dev": "rollup -c --watch",
+    "clean": "tsc --build --clean",
+    "build": "rollup -c"
   },
   "author": "Joao Reis",
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
-    "typescript": "^4.6.2"
+    "typescript": "^4.6.2",
+    "@types/jquery": "^3.5.14",
+    "@types/node": "^10.7.1",
+    "browser-sync": "^2.27.10",
+    "browserify": "^16.2.2",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-eslint": "^7.0.0",
+    "rollup-plugin-minify": "^1.0.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript": "^1.0.1",
+    "rollup-plugin-uglify": "^6.0.4",
+    "ts-jest": "^27.1.2",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.4.0",
+    "webpack-stream": "^7.0.0"
   }
 }
