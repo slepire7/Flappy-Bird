@@ -5,10 +5,12 @@
     "noEmitOnError": true,
     "removeComments": true,
     "noUnusedLocals": true,
-    "sourceMap": false,    
+    "moduleResolution": "Node",
+    "strictNullChecks": false,
+    "sourceMap": false,
     "target": "ESNext",
     "outDir": "script"
-  },  
+  },
   "include": [
     "ts/*"
   ]
