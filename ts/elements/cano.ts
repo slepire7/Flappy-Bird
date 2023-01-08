@@ -1,16 +1,15 @@
-import { Dimensoes, ICano, IFlappybird, Movimento } from "../interface/base";
+import { Interface } from "../interface/base";
 import { Config } from '../config'
 
 
-export class Cano implements ICano {
-    _flappyBird: IFlappybird
+export class Cano implements Interface.Elements.ICano {
     largura: number;
     altura: number;
     espaco: number;
-    chao: Movimento;
-    ceu: Movimento;
-    pares: Dimensoes[];
-    constructor(flappyBird: IFlappybird) {
+    chao: Interface.Utils.Movimento;
+    ceu: Interface.Utils.Movimento;
+    pares: Interface.Utils.Dimensoes[];
+    constructor() {
         this.largura = 52;
         this.altura = 400;
         this.espaco = 80;
@@ -23,7 +22,6 @@ export class Cano implements ICano {
             spriteY: 169,
         };
         this.pares = [];
-        this._flappyBird = flappyBird;
     }
     desenha() {
         this.pares.forEach((par) => {
@@ -61,7 +59,7 @@ export class Cano implements ICano {
             }
         })
     };
-    temColisaoComOFlappyBird(par: Dimensoes, _flappyBird: IFlappybird) {
+    temColisaoComOFlappyBird(par: Interface.Utils.Dimensoes, _flappyBird: Interface.Elements.IFlappybird) {
 
         const cabecaDoFlappy = _flappyBird.y;
         const peDoFlappy = _flappyBird.y + _flappyBird.altura;
@@ -73,7 +71,7 @@ export class Cano implements ICano {
         }
         return false;
     };
-    atualiza(action: Function) {
+    atualiza(action: Function, _flappyBird: Interface.Elements.IFlappybird) {
         const passou100Frames = Config.frames % 100 === 0;
         if (passou100Frames) {
             this.pares.push({
@@ -85,7 +83,7 @@ export class Cano implements ICano {
         this.pares.forEach((par) => {
             par.x = par.x - 2;
 
-            if (this.temColisaoComOFlappyBird(par, this._flappyBird)) {
+            if (this.temColisaoComOFlappyBird(par, _flappyBird)) {
                 Config.TrilhasSonoras.HIT().play();
                 action();
             }

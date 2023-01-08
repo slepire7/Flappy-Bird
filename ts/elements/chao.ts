@@ -1,7 +1,7 @@
-import { IBaseModel } from "../interface/base";
+import { Interface } from "../interface/base";
 import { Config } from '../config';
 
-export class Chao implements IBaseModel {
+export class Chao implements Interface.Elements.IChao {
     spriteX: number;
     spriteY: number;
     largura: number;

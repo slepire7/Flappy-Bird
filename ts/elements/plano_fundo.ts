@@ -1,6 +1,6 @@
-import { IBaseModel } from "../interface/base";
+import { Interface } from "../interface/base";
 import { Config } from "../config";
-export class PlanoDeFundo implements IBaseModel {
+export class PlanoDeFundo implements Interface.Utils.IBaseModel {
     spriteX: number;
     spriteY: number;
     largura: number;

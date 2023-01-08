@@ -1,33 +1,33 @@
-import { Globais, IBaseModel, IPageGame, Pages } from "../interface/base";
+import { Interface } from "../interface/base";
 import { Config } from "../config";
-import { flappyBird } from "../elements/flappybird";
+import { FlappyBird } from "../elements/flappybird";
 import { Chao } from '../elements/chao';
 import { Cano } from '../elements/cano';
 import { PlanoDeFundo } from '../elements/plano_fundo';
-import { Placar, ScoreGame } from '../elements/placar';
+import { Placar, MainScoreGame } from '../elements/placar';
 export namespace Game.Main {
-    export const Engine: Globais = {}
-    export const Telas: Pages = {
+    const Engine: Interface.Utils.Globais = {}
+    export const Telas: Interface.Utils.Pages = {
         INICIO: {
             inicializa() {
-                Engine.flappyBird = new flappyBird(Engine);
+                Engine.flappyBird = new FlappyBird();
                 Engine.chao = new Chao();
-                Engine.canos = new Cano(Engine.flappyBird);
+                Engine.canos = new Cano();
             },
             desenha() {
                 new PlanoDeFundo().desenha();
-                //@ts-ignore
+
                 Engine.flappyBird.desenha();
-                //@ts-ignore
+
                 Engine.chao.desenha();
-                //@ts-ignore
+
                 mensagemGetReady.desenha();
             },
             click() {
                 mudaParaTela(Telas.JOGO);
             },
             atualiza() {
-                //@ts-ignore
+
                 Engine.chao.atualiza();
             }
         },
@@ -37,27 +37,20 @@ export namespace Game.Main {
             },
             desenha() {
                 new PlanoDeFundo().desenha();
-                //@ts-ignore
                 Engine.canos.desenha();
-                //@ts-ignore
                 Engine.chao.desenha();
-                //@ts-ignore
+
                 Engine.flappyBird.desenha();
-                //@ts-ignore
+
                 Engine.placar.desenha();
             },
             click() {
-                //@ts-ignore
                 Engine.flappyBird.pula();
             },
             atualiza() {
-                //@ts-ignore
-                Engine.canos.atualiza(TelaCondicional(Telas.GAME_OVER));
-                //@ts-ignore
+                Engine.canos.atualiza(TelaCondicional(Telas.GAME_OVER), Engine.flappyBird);
                 Engine.chao.atualiza();
-                //@ts-ignore
-                Engine.flappyBird.atualiza(TelaCondicional(Telas.GAME_OVER));
-                //@ts-ignore
+                Engine.flappyBird.atualiza(TelaCondicional(Telas.GAME_OVER), Engine);
                 Engine.placar.atualiza();
             }
         },
@@ -68,7 +61,7 @@ export namespace Game.Main {
                 if (mensagemGameOver.desenha)
                     mensagemGameOver.desenha();
 
-                ScoreGame.desenha();
+                new MainScoreGame().desenha();
             },
             atualiza() {
 
@@ -79,19 +72,18 @@ export namespace Game.Main {
         }
     }
 
-    export function mudaParaTela(page: IPageGame) {
+    export function mudaParaTela(page: Interface.Utils.IPageGame) {
         TelaAtiva = page;
-        if (TelaAtiva.inicializa)
-            TelaAtiva.inicializa();
+        TelaAtiva.inicializa();
     }
-    export function TelaCondicional(page: IPageGame) {
+    export function TelaCondicional(page: Interface.Utils.IPageGame) {
         return () => {
             TelaAtiva = page;
-            if (TelaAtiva.inicializa)
-                TelaAtiva.inicializa();
+
+            TelaAtiva.inicializa();
         }
     }
-    export let TelaAtiva: IPageGame = {
+    export let TelaAtiva: Interface.Utils.IPageGame = {
         click: () => {
         },
         atualiza: () => {
@@ -102,14 +94,14 @@ export namespace Game.Main {
         }
     }
 
-    const mensagemGetReady: IBaseModel = {
+    const mensagemGetReady: Interface.Elements.IMessage = {
         spriteX: 134,
         spriteY: 0,
         largura: 174,
         altura: 152,
         x: (Config.canvas.width / 2) - 174 / 2,
         y: 50,
-        desenha: () => {
+        desenha() {
             Config.Draw({
                 spriteX: mensagemGetReady.spriteX,
                 spriteY: mensagemGetReady.spriteY,
@@ -120,7 +112,7 @@ export namespace Game.Main {
             });
         }
     }
-    const mensagemGameOver: IBaseModel = {
+    const mensagemGameOver: Interface.Elements.IMessage = {
         spriteX: 134,
         spriteY: 153,
         largura: 226,

@@ -1,5 +1,5 @@
 import { Config } from "../config";
-import { IBaseModel } from "../interface/base";
+import { Interface } from "../interface/base";
 import { Storage } from "../storage";
 
 export class Placar {
@@ -27,119 +27,79 @@ export class Placar {
             this.pontuacao = this.pontuacao + 1;
         }
     }
+}
+
+export class Score implements Interface.Utils.IScore {
+    constructor(
+        _spriteX: number,
+        _spriteY: number,
+        _largura: number,
+        _altura: number,
+        _x: number,
+        _y: number) {
+        this.spriteX = _spriteX
+        this.spriteY = _spriteY
+        this.largura = _largura
+        this.altura = _altura
+        this.x = _x
+        this.y = _y
+    }
+    desenha(): void {
+        Config.Draw({
+            spriteX: this.spriteX,
+            spriteY: this.spriteY,
+            largura: this.largura,
+            altura: this.altura,
+            x: this.x,
+            y: this.y
+        })
+    }
+    spriteX: number;
+    spriteY: number;
+    largura: number;
+    altura: number;
+    x: number;
+    y: number;
 
 }
-export class ScoreGame {
+export class MainScoreGame implements Interface.Utils.IScoreMain {
+    none: Interface.Utils.IScore;
+    bronze: Interface.Utils.IScore;
+    prata: Interface.Utils.IScore;
+    ouro: Interface.Utils.IScore;
     constructor() {
-        ScoreGame.none = {
-            spriteX: 0,
-            spriteY: 78,
-            largura: 44,
-            altura: 44,
-            x: (Config.canvas.width / 2) / 2.4,
-            y: 135,
-            desenha() {
-                Config.Draw({
-                    spriteX: ScoreGame.none.spriteX,
-                    spriteY: ScoreGame.none.spriteY,
-                    largura: ScoreGame.none.largura,
-                    altura: ScoreGame.none.altura,
-                    x: ScoreGame.none.x,
-                    y: ScoreGame.none.y
-                })
-            }
-        }
-        ScoreGame.bronze = {
-
-            spriteX: 48,
-            spriteY: 124,
-            largura: 44,
-            altura: 44,
-            x: (Config.canvas.width / 2) / 2.4,
-            y: 135,
-            desenha() {
-                Config.Draw({
-                    spriteX: ScoreGame.bronze.spriteX,
-                    spriteY: ScoreGame.bronze.spriteY,
-                    largura: ScoreGame.bronze.largura,
-                    altura: ScoreGame.bronze.altura,
-                    x: ScoreGame.bronze.x,
-                    y: ScoreGame.bronze.y
-                })
-            }
-        }
-        ScoreGame.prata =
-        {
-            spriteX: 48,
-            spriteY: 78,
-            largura: 44,
-            altura: 44,
-            x: (Config.canvas.width / 2) / 2.4,
-            y: 135,
-            desenha() {
-                Config.Draw({
-                    spriteX: ScoreGame.prata.spriteX,
-                    spriteY: ScoreGame.prata.spriteY,
-                    largura: ScoreGame.prata.largura,
-                    altura: ScoreGame.prata.altura,
-                    x: ScoreGame.prata.x,
-                    y: ScoreGame.prata.y
-                })
-            }
-        }
-        ScoreGame.ouro = {
-            spriteX: 0,
-            spriteY: 124,
-            largura: 44,
-            altura: 44,
-            x: (Config.canvas.width / 2) / 2.4,
-            y: 135,
-            desenha() {
-                Config.Draw({
-                    spriteX: ScoreGame.ouro.spriteX,
-                    spriteY: ScoreGame.ouro.spriteY,
-                    largura: ScoreGame.ouro.largura,
-                    altura: ScoreGame.ouro.altura,
-                    x: ScoreGame.ouro.x,
-                    y: ScoreGame.ouro.y
-                })
-            }
-        }
+        const X_In_Screen = (Config.canvas.width / 2) / 2.4;
+        const Y_In_Screen = 135;
+        this.none = new Score(0, 78, 44, 44, X_In_Screen, Y_In_Screen);
+        this.bronze = new Score(48, 124, 44, 44, X_In_Screen, Y_In_Screen);
+        this.prata = new Score(48, 78, 44, 44, X_In_Screen, Y_In_Screen);
+        this.ouro = new Score(0, 124, 44, 44, X_In_Screen, Y_In_Screen);
     }
-
-    public static none: IBaseModel;
-    public static bronze: IBaseModel;
-
-
-    public static prata: IBaseModel;
-    public static ouro: IBaseModel;
-
-    static desenha() {
+    desenha() {
         const pontuacaoAtual = Storage.Get<number>(Config.KeyNameStorage.lastPoint);
         const bestPontuacao = Storage.Get<number>(Config.KeyNameStorage.bestPoint);
         Config.contexto.fillText(`${pontuacaoAtual}`, (Config.canvas.width / 3) * 2.4, 147);
         Config.contexto.fillText(`${bestPontuacao}`, (Config.canvas.width / 3) * 2.4, (Config.canvas.width / 3) * 1.9);
         if (pontuacaoAtual < 50) {
-            ///@ts-ignore
-            ScoreGame.none.desenha();
+
+            this.none.desenha();
             return;
         }
         if (pontuacaoAtual <= 100) {
-            ///@ts-ignore
-            ScoreGame.bronze.desenha();
+
+            this.bronze.desenha();
             return;
         }
         if (pontuacaoAtual <= 150) {
-            ///@ts-ignore
-            ScoreGame.prata.desenha();
+
+            this.prata.desenha();
             return;
         }
         if (pontuacaoAtual >= 200) {
-            ///@ts-ignore
-            ScoreGame.ouro.desenha();
+
+            this.ouro.desenha();
             return;
         }
     }
+
 }
-
-

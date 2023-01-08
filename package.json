@@ -10,9 +10,7 @@
   },
   "author": "Joao Reis",
   "license": "ISC",
-  "dependencies": {},
   "devDependencies": {
-    "typescript": "^4.6.2",
     "@types/jquery": "^3.5.14",
     "@types/node": "^10.7.1",
     "browser-sync": "^2.27.10",
@@ -27,6 +25,7 @@
     "ts-jest": "^27.1.2",
     "ts-node": "^10.9.1",
     "tslib": "^2.4.0",
+    "typescript": "^4.6.2",
     "webpack-stream": "^7.0.0"
   }
 }

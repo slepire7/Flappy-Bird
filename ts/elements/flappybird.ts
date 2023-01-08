@@ -1,11 +1,7 @@
-import { Globais, IFlappybird, Movimento } from '../interface/base'
+import { Interface } from '../interface/base'
 import { Config } from '../config';
 
-export class flappyBird implements IFlappybird {
-    _engine: Globais;
-    constructor(Engine: Globais) {
-        this._engine = Engine;
-    }
+export class FlappyBird implements Interface.Elements.IFlappybird {
     public frameAtual: number = 0;
     public spriteX: number = 0;
     public spriteY: number = 0;
@@ -20,7 +16,7 @@ export class flappyBird implements IFlappybird {
         Config.TrilhasSonoras.PULO().play();
         this.velocidade = - this.pulo
     };
-    movimentos: Movimento[] = [
+    movimentos: Interface.Utils.Movimento[] = [
         { spriteX: 0, spriteY: 0, }, // asa pra cima
         { spriteX: 0, spriteY: 26, }, // asa no meio 
         { spriteX: 0, spriteY: 52, }, // asa pra baixo
@@ -49,10 +45,9 @@ export class flappyBird implements IFlappybird {
             y: this.y
         });
     };
-    atualiza: Function = (action: Function) => {
-        if (!this._engine.chao) return;
-        
-        if (Config.fazColisao(this, this._engine.chao)) {
+    atualiza(action: Function, _engine: Interface.Utils.Globais) {
+
+        if (Config.fazColisao(this, _engine.chao)) {
             Config.TrilhasSonoras.CAIU().play()
             action();
             return;
