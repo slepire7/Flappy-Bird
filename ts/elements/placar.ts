@@ -29,39 +29,7 @@ export class Placar {
     }
 }
 
-export class Score implements Interface.Utils.IScore {
-    constructor(
-        _spriteX: number,
-        _spriteY: number,
-        _largura: number,
-        _altura: number,
-        _x: number,
-        _y: number) {
-        this.spriteX = _spriteX
-        this.spriteY = _spriteY
-        this.largura = _largura
-        this.altura = _altura
-        this.x = _x
-        this.y = _y
-    }
-    desenha(): void {
-        Config.Draw({
-            spriteX: this.spriteX,
-            spriteY: this.spriteY,
-            largura: this.largura,
-            altura: this.altura,
-            x: this.x,
-            y: this.y
-        })
-    }
-    spriteX: number;
-    spriteY: number;
-    largura: number;
-    altura: number;
-    x: number;
-    y: number;
 
-}
 export class MainScoreGame implements Interface.Utils.IScoreMain {
     none: Interface.Utils.IScore;
     bronze: Interface.Utils.IScore;
@@ -101,5 +69,38 @@ export class MainScoreGame implements Interface.Utils.IScoreMain {
             return;
         }
     }
+
+}
+class Score implements Interface.Utils.IScore {
+    constructor(
+        _spriteX: number,
+        _spriteY: number,
+        _largura: number,
+        _altura: number,
+        _x: number,
+        _y: number) {
+        this.spriteX = _spriteX
+        this.spriteY = _spriteY
+        this.largura = _largura
+        this.altura = _altura
+        this.x = _x
+        this.y = _y
+    }
+    desenha(): void {
+        Config.Draw({
+            spriteX: this.spriteX,
+            spriteY: this.spriteY,
+            largura: this.largura,
+            altura: this.altura,
+            x: this.x,
+            y: this.y
+        })
+    }
+    spriteX: number;
+    spriteY: number;
+    largura: number;
+    altura: number;
+    x: number;
+    y: number;
 
 }
