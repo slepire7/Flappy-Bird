@@ -5,7 +5,7 @@ import { Chao } from '../elements/chao';
 import { Cano } from '../elements/cano';
 import { PlanoDeFundo } from '../elements/plano_fundo';
 import { Placar, MainScoreGame } from '../elements/placar';
-
+import { Service } from "../service/scoreapiService";
 export namespace Game.Main {
     const Engine: Interface.Utils.Globais = {}
     export const Telas: Interface.Utils.Pages = {
@@ -125,6 +125,7 @@ export namespace Game.Main {
                 x: mensagemGameOver.x,
                 y: mensagemGameOver.y
             })
+            Service.HttpService.AtualizaPontuacao();
             Config.Method.ClearMemory();
         }
     }
