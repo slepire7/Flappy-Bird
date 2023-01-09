@@ -1,6 +1,5 @@
 import { Config } from "../config";
 import { Interface } from "../interface/base";
-import { Service } from "../service/scoreapiService";
 import { Storage } from "../storage";
 
 export class Placar implements Interface.Elements.IPlacar {
@@ -18,7 +17,6 @@ export class Placar implements Interface.Elements.IPlacar {
             lastP = Storage.Get<number>(Config.KeyNameStorage.lastPoint);
         if (lastP > bestP) {
             Storage.Set(Config.KeyNameStorage.bestPoint, this.pontuacao)
-            Service.HttpService.AtualizaPontuacao();
         }
 
     };
