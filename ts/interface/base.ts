@@ -85,7 +85,7 @@ export namespace Interface.Elements {
         pares: Interface.Utils.Dimensoes[]
         temColisaoComOFlappyBird(par: Interface.Utils.Dimensoes, _flappyBird: IFlappybird): boolean
         desenha: Function
-        atualiza(action: Function, _flappyBird: IFlappybird): void
+        atualiza(action: Function, _flappyBird: IFlappybird, _placar: Interface.Elements.IPlacar): void
     }
 
     export interface IChao extends Interface.Utils.IBaseModel {
