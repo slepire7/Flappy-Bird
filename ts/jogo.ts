@@ -5,16 +5,17 @@ import { Storage } from './storage';
 
 namespace Jogo.PageEvents {
     export function CarregarPlacar() {
-        const data = Service.HttpService.ListarPontuacao();
-        console.log(data);
-        const ulPlacar = document.querySelector<HTMLUListElement>('#list-placar');
-        ulPlacar.innerHTML = ""
-        data.map((item, idx) => {
-            let liItem = document.createElement('li')
-            liItem.className = 'list-group-item'
-            liItem.innerText = `${(idx + 1)}º ${item.nick} - ${item.point}`
-            ulPlacar.appendChild(liItem);
-        })
+        Service.HttpService.ListarPontuacao().then((data) => {
+            console.log(data);
+            const ulPlacar = document.querySelector<HTMLUListElement>('#list-placar');
+            ulPlacar.innerHTML = ""
+            data.map((item, idx) => {
+                let liItem = document.createElement('li')
+                liItem.className = 'list-group-item'
+                liItem.innerText = `${(idx + 1)}º ${item.nick} - ${item.point}`
+                ulPlacar.appendChild(liItem);
+            })
+        });
     }
     export function Main() {
 
