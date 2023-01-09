@@ -1,5 +1,6 @@
 import { Interface } from "../interface/base";
 import { Config } from '../config'
+import { Storage } from "../storage";
 
 
 export class Cano implements Interface.Elements.ICano {
@@ -12,7 +13,7 @@ export class Cano implements Interface.Elements.ICano {
     constructor() {
         this.largura = 52;
         this.altura = 400;
-        this.espaco = 80;
+        this.espaco = 90;
         this.chao = {
             spriteX: 0,
             spriteY: 169,
@@ -26,7 +27,6 @@ export class Cano implements Interface.Elements.ICano {
     desenha() {
         this.pares.forEach((par) => {
             const yRandom = par.y;
-            const espacamentoEntreCanos = 90;
             const canoCeuX = par.x;
             const canoCeuY = yRandom;
             // [Cano do Céu]
@@ -40,7 +40,7 @@ export class Cano implements Interface.Elements.ICano {
             })
             // [Cano do Chão]
             const canoChaoX = par.x;
-            const canoChaoY = this.altura + espacamentoEntreCanos + yRandom;
+            const canoChaoY = this.altura + this.espaco + yRandom;
             Config.Draw({
                 spriteX: this.chao.spriteX,
                 spriteY: this.chao.spriteY,
@@ -60,28 +60,30 @@ export class Cano implements Interface.Elements.ICano {
         })
     };
     temColisaoComOFlappyBird(par: Interface.Utils.Dimensoes, _flappyBird: Interface.Elements.IFlappybird) {
+        const Desconto = 2;
+        const cabecaDoFlappy = _flappyBird.y - Desconto;
+        const peDoFlappy = _flappyBird.y + _flappyBird.altura - Desconto;
 
-        const cabecaDoFlappy = _flappyBird.y;
-        const peDoFlappy = _flappyBird.y + _flappyBird.altura;
         if ((_flappyBird.x + _flappyBird.largura) >= par.x) {
-            ///@ts-ignore
-            if (cabecaDoFlappy <= par.canoCeu.y || peDoFlappy >= par.canoChao.y) {
+            if (cabecaDoFlappy <= (par.canoCeu.y - Desconto) || peDoFlappy >= par.canoChao.y) {
                 return true;
             }
         }
         return false;
     };
-    atualiza(action: Function, _flappyBird: Interface.Elements.IFlappybird) {
-        const passou100Frames = Config.frames % 100 === 0;
-        if (passou100Frames) {
+    atualiza(action: Function, _flappyBird: Interface.Elements.IFlappybird, _placar: Interface.Elements.IPlacar) {
+
+        const _Frames = intervaloFrames[Config.Method.randomIntFromInterval(0, intervaloFrames.length - 1)]
+        const passouFrames = Config.frames % _Frames == 0;
+        if (passouFrames)
             this.pares.push({
                 x: Config.canvas.width,
                 y: -150 * (Math.random() + 1),
             });
-        }
 
-        this.pares.forEach((par) => {
-            par.x = par.x - 2;
+        for (let par of this.pares) {
+            const currentPoint = Storage.Get<number>(Config.KeyNameStorage.currentPoint) || 0;
+            par.x = par.x - Velocidades.dispach(currentPoint);
 
             if (this.temColisaoComOFlappyBird(par, _flappyBird)) {
                 Config.TrilhasSonoras.HIT().play();
@@ -90,9 +92,35 @@ export class Cano implements Interface.Elements.ICano {
 
             if (par.x + this.largura <= 0) {
                 this.pares.shift();
+                _placar.atualiza();
             }
-        });
+        }
 
     }
-
 }
+
+const intervaloFrames = [
+    100,
+    150
+]
+const dificuldade_velocidade = {
+    "20": 2,
+    "40": 2.5,
+    "80": 4,
+    "100": 4.5,
+    "110": 5,
+    "120": 6,
+    "130": 7,
+    "140": 8,
+    "150": 9,
+    "200": 10
+}
+const Velocidades = {
+    dispach: (pontuacao: number) => {
+        const keys = Object.keys(dificuldade_velocidade).map(itm => new Number(itm));
+        const field = keys.find(key => key >= pontuacao) || keys[keys.length - 1]
+        const difcultades = dificuldade_velocidade[field as keyof object];
+
+        return difcultades
+    },
+};

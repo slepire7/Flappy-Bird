@@ -10,6 +10,7 @@ namespace Jogo.PageEvents {
                 Game.Main.TelaAtiva.click();
             }
         });
+
         window.addEventListener('keypress', function (e: KeyboardEvent) {
             if (Game.Main.TelaAtiva.click)
                 Game.Main.TelaAtiva.click()
@@ -20,7 +21,7 @@ namespace Jogo.PageEvents {
     function loop() {
         Game.Main.TelaAtiva.desenha();
         Game.Main.TelaAtiva.atualiza();
-        Config.frames = Config.frames + 1;
+        Config.frames += 1;
         requestAnimationFrame(loop);
     }
 }

@@ -5,6 +5,7 @@ import { Chao } from '../elements/chao';
 import { Cano } from '../elements/cano';
 import { PlanoDeFundo } from '../elements/plano_fundo';
 import { Placar, MainScoreGame } from '../elements/placar';
+
 export namespace Game.Main {
     const Engine: Interface.Utils.Globais = {}
     export const Telas: Interface.Utils.Pages = {
@@ -39,19 +40,16 @@ export namespace Game.Main {
                 new PlanoDeFundo().desenha();
                 Engine.canos.desenha();
                 Engine.chao.desenha();
-
                 Engine.flappyBird.desenha();
-
                 Engine.placar.desenha();
             },
             click() {
                 Engine.flappyBird.pula();
             },
             atualiza() {
-                Engine.canos.atualiza(TelaCondicional(Telas.GAME_OVER), Engine.flappyBird);
+                Engine.canos.atualiza(TelaCondicional(Telas.GAME_OVER), Engine.flappyBird, Engine.placar);
                 Engine.chao.atualiza();
                 Engine.flappyBird.atualiza(TelaCondicional(Telas.GAME_OVER), Engine);
-                Engine.placar.atualiza();
             }
         },
         GAME_OVER: {
@@ -79,7 +77,6 @@ export namespace Game.Main {
     export function TelaCondicional(page: Interface.Utils.IPageGame) {
         return () => {
             TelaAtiva = page;
-
             TelaAtiva.inicializa();
         }
     }
@@ -128,6 +125,7 @@ export namespace Game.Main {
                 x: mensagemGameOver.x,
                 y: mensagemGameOver.y
             })
+            Config.Method.ClearMemory();
         }
     }
 }

@@ -2,8 +2,9 @@ import { Config } from "../config";
 import { Interface } from "../interface/base";
 import { Storage } from "../storage";
 
-export class Placar {
+export class Placar implements Interface.Elements.IPlacar {
     pontuacao: number = 0;
+
     desenha() {
         Config.contexto.font = '35px "VT323"';
         Config.contexto.textAlign = 'right';
@@ -12,20 +13,16 @@ export class Placar {
 
         Storage.Set(Config.KeyNameStorage.lastPoint, this.pontuacao)
 
-        let bestP = Storage.Get<number>(Config.KeyNameStorage.bestPoint),
+        const bestP = Storage.Get<number>(Config.KeyNameStorage.bestPoint),
             lastP = Storage.Get<number>(Config.KeyNameStorage.lastPoint);
         if (lastP > bestP)
             Storage.Set(Config.KeyNameStorage.bestPoint, this.pontuacao)
 
     };
     atualiza() {
-        const intervaloDeFrames = 30;
-        const passouOIntervalo = Config.frames % intervaloDeFrames === 0;
-
-        if (passouOIntervalo) {
-            Config.TrilhasSonoras.PONTO().play();
-            this.pontuacao = this.pontuacao + 1;
-        }
+        Config.TrilhasSonoras.PONTO().play();
+        this.pontuacao = this.pontuacao + 1;
+        Storage.Set(Config.KeyNameStorage.currentPoint, this.pontuacao);
     }
 }
 
@@ -36,39 +33,38 @@ export class MainScoreGame implements Interface.Utils.IScoreMain {
     prata: Interface.Utils.IScore;
     ouro: Interface.Utils.IScore;
     constructor() {
-        const X_In_Screen = (Config.canvas.width / 2) / 2.4;
-        const Y_In_Screen = 135;
+        const X_In_Screen = (Config.canvas.width / 2) / 2.4,
+            Y_In_Screen = 135;
         this.none = new Score(0, 78, 44, 44, X_In_Screen, Y_In_Screen);
         this.bronze = new Score(48, 124, 44, 44, X_In_Screen, Y_In_Screen);
         this.prata = new Score(48, 78, 44, 44, X_In_Screen, Y_In_Screen);
         this.ouro = new Score(0, 124, 44, 44, X_In_Screen, Y_In_Screen);
     }
     desenha() {
-        const pontuacaoAtual = Storage.Get<number>(Config.KeyNameStorage.lastPoint);
-        const bestPontuacao = Storage.Get<number>(Config.KeyNameStorage.bestPoint);
-        Config.contexto.fillText(`${pontuacaoAtual}`, (Config.canvas.width / 3) * 2.4, 147);
-        Config.contexto.fillText(`${bestPontuacao}`, (Config.canvas.width / 3) * 2.4, (Config.canvas.width / 3) * 1.9);
+        const pontuacaoAtual = Storage.Get<number>(Config.KeyNameStorage.lastPoint),
+            bestPontuacao = Storage.Get<number>(Config.KeyNameStorage.bestPoint);
+        const X_In_Screen = (Config.canvas.width / 3) * 2.4,
+            Y_In_Screen = (Config.canvas.width / 3) * 1.9
+        Config.contexto.fillText(`${pontuacaoAtual}`, X_In_Screen, 147);
+        Config.contexto.fillText(`${bestPontuacao}`, X_In_Screen, Y_In_Screen);
         if (pontuacaoAtual < 50) {
-
             this.none.desenha();
             return;
         }
         if (pontuacaoAtual <= 100) {
-
             this.bronze.desenha();
             return;
         }
         if (pontuacaoAtual <= 150) {
-
             this.prata.desenha();
             return;
         }
         if (pontuacaoAtual >= 200) {
-
             this.ouro.desenha();
             return;
         }
     }
+    
 
 }
 class Score implements Interface.Utils.IScore {

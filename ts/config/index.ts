@@ -1,4 +1,5 @@
-import { IBaseModel } from "../interface/base";
+import { Interface } from "../interface/base";
+import { Storage } from "../storage";
 
 export namespace Config {
     export const canvas = document.querySelector('canvas') as HTMLCanvasElement;
@@ -7,7 +8,8 @@ export namespace Config {
     export let frames = 0;
     export const KeyNameStorage = {
         lastPoint: 'FlappyBird1.0Lp',
-        bestPoint: 'FlappyBird1.0bp'
+        bestPoint: 'FlappyBird1.0bp',
+        currentPoint: 'FlappyBird1.0cp'
     }
     const hostnameDev = ['localhost', '127.0.0.1']
     const isDeveloper = hostnameDev.includes(window.location.hostname);
@@ -20,7 +22,7 @@ export namespace Config {
     }
     export const sprites = new Image();
     sprites.src = `${isDeveloper == false ? '../Flappy-Bird/' : '../'}assets/texture/sprites.png`;
-    export const Draw = (Model: IBaseModel) => {
+    export const Draw = (Model: Interface.Utils.IBaseModel) => {
         contexto.drawImage(
             Config.sprites,
             Model.spriteX, Model.spriteY,
@@ -30,11 +32,20 @@ export namespace Config {
         )
     }
 
-    export function fazColisao(a: IBaseModel, b: IBaseModel) {
+    export function fazColisao(a: Interface.Utils.IBaseModel, b: Interface.Utils.IBaseModel) {
 
         const aY = a.y + a.altura;
         const bY = b.y;
         return aY >= bY;
     }
 
+}
+export namespace Config.Method {
+    export function randomIntFromInterval(min: number, max: number) { // min and max included 
+        return Math.floor(Math.random() * (max - min + 1) + min)
+    }
+    export function ClearMemory() {
+        frames = 0;
+        Storage.Set(KeyNameStorage.currentPoint, 0)
+    }
 }
