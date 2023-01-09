@@ -1,5 +1,6 @@
 import { Config } from "../config";
 import { Interface } from "../interface/base";
+import { Service } from "../service/scoreapiService";
 import { Storage } from "../storage";
 
 export class Placar implements Interface.Elements.IPlacar {
@@ -15,8 +16,10 @@ export class Placar implements Interface.Elements.IPlacar {
 
         const bestP = Storage.Get<number>(Config.KeyNameStorage.bestPoint),
             lastP = Storage.Get<number>(Config.KeyNameStorage.lastPoint);
-        if (lastP > bestP)
+        if (lastP > bestP) {
             Storage.Set(Config.KeyNameStorage.bestPoint, this.pontuacao)
+            Service.HttpService.AtualizaPontuacao();
+        }
 
     };
     atualiza() {
@@ -64,7 +67,7 @@ export class MainScoreGame implements Interface.Utils.IScoreMain {
             return;
         }
     }
-    
+
 
 }
 class Score implements Interface.Utils.IScore {
