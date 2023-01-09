@@ -1,6 +1,12 @@
 import { Interface } from "../interface/base";
 import { Storage } from "../storage";
-
+export namespace Config.Constant {
+    export const API = {
+        Atualizar: 'https://flappybirdapi.azurewebsites.net/api/Put?code=9MNUOUmKKqCavdFrMwWBDPCPzV5jduvpV3PQAEWVMqTuAzFuARgB6A==',
+        Criar: 'https://flappybirdapi.azurewebsites.net/api/Post?code=P7gtMsQyyVYhGGeoFjFHqYyHcE-IJOF4WSnzfKjpx-ikAzFu3oVfjw==',
+        Listar: 'https://flappybirdapi.azurewebsites.net/api/Get?code=97ZirDQdmfpy4V8o4HSGP31IzHS9zBp8uGv6X-rAgq05AzFuALUcNA=='
+    }
+}
 export namespace Config {
     export const canvas = document.querySelector('canvas') as HTMLCanvasElement;
     export const contexto = canvas.getContext('2d') as CanvasRenderingContext2D;
@@ -9,7 +15,8 @@ export namespace Config {
     export const KeyNameStorage = {
         lastPoint: 'FlappyBird1.0Lp',
         bestPoint: 'FlappyBird1.0bp',
-        currentPoint: 'FlappyBird1.0cp'
+        currentPoint: 'FlappyBird1.0cp',
+        nickName: 'FlappyBird_nickname'
     }
     const hostnameDev = ['localhost', '127.0.0.1']
     const isDeveloper = hostnameDev.includes(window.location.hostname);
