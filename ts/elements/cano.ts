@@ -100,7 +100,6 @@ export class Cano implements Interface.Elements.ICano {
 }
 
 const intervaloFrames = [
-    100,
     150
 ]
 const dificuldade_velocidade = {
