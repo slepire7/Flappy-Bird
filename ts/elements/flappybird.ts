@@ -11,7 +11,7 @@ export class FlappyBird implements Interface.Elements.IFlappybird {
     public y: number = 50;
     public gravidade: number = 0.25;
     public velocidade: number = 0;
-    public pulo: number = 4;
+    public pulo: number = 4.5;
     pula() {
         Config.TrilhasSonoras.PULO().play();
         this.velocidade = - this.pulo
@@ -24,7 +24,7 @@ export class FlappyBird implements Interface.Elements.IFlappybird {
     ];
     atualizaOFrameAtual() {
         const intervaloDeFrames = 10;
-        const passouOIntervalo = Config.frames % intervaloDeFrames === 0;
+        const passouOIntervalo = Config.Frames % intervaloDeFrames === 0;
 
         if (passouOIntervalo) {
             const baseDoIncremento = 1;
@@ -34,7 +34,6 @@ export class FlappyBird implements Interface.Elements.IFlappybird {
         }
     };
     desenha: Function = () => {
-        this.atualizaOFrameAtual();
         const { spriteX, spriteY } = this.movimentos[this.frameAtual];
         Config.Draw({
             spriteX: spriteX,
@@ -46,7 +45,7 @@ export class FlappyBird implements Interface.Elements.IFlappybird {
         });
     };
     atualiza(action: Function, _engine: Interface.Utils.Globais) {
-
+        this.atualizaOFrameAtual();
         if (Config.fazColisao(this, _engine.chao)) {
             Config.TrilhasSonoras.CAIU().play()
             action();

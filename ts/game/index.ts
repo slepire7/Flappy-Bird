@@ -47,6 +47,7 @@ export namespace Game.Main {
                 Engine.flappyBird.pula();
             },
             atualiza() {
+                if (Config.IsPause) return;
                 Engine.canos.atualiza(TelaCondicional(Telas.GAME_OVER), Engine.flappyBird, Engine.placar);
                 Engine.chao.atualiza();
                 Engine.flappyBird.atualiza(TelaCondicional(Telas.GAME_OVER), Engine);
@@ -75,10 +76,7 @@ export namespace Game.Main {
         TelaAtiva.inicializa();
     }
     export function TelaCondicional(page: Interface.Utils.IPageGame) {
-        return () => {
-            TelaAtiva = page;
-            TelaAtiva.inicializa();
-        }
+        return () => mudaParaTela(page);
     }
     export let TelaAtiva: Interface.Utils.IPageGame = {
         click: () => {

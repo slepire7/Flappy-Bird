@@ -60,21 +60,27 @@ export class Cano implements Interface.Elements.ICano {
         })
     };
     temColisaoComOFlappyBird(par: Interface.Utils.Dimensoes, _flappyBird: Interface.Elements.IFlappybird) {
-        const Desconto = 2;
-        const cabecaDoFlappy = _flappyBird.y - Desconto;
-        const peDoFlappy = _flappyBird.y + _flappyBird.altura - Desconto;
+        const Desconto_Colisao = 1;
+        const Desconto_Colisao_Costa = 5;
+        const cabecaDoFlappy = _flappyBird.y + Desconto_Colisao;
 
-        if ((_flappyBird.x + _flappyBird.largura) >= par.x) {
-            if (cabecaDoFlappy <= (par.canoCeu.y - Desconto) || peDoFlappy >= par.canoChao.y) {
+        const peDoFlappy = (_flappyBird.y + _flappyBird.altura) - Desconto_Colisao;
+        const costaDoFlappy = Config.Method.IsNegative(_flappyBird.x + _flappyBird.largura) ?
+            (_flappyBird.x + _flappyBird.largura) - Desconto_Colisao_Costa :
+            (_flappyBird.x + _flappyBird.largura) + Desconto_Colisao_Costa
+
+        if (costaDoFlappy >= par.x) {
+            if (cabecaDoFlappy <= par.canoCeu.y || peDoFlappy >= par.canoChao.y)
                 return true;
-            }
+
         }
         return false;
     };
     atualiza(action: Function, _flappyBird: Interface.Elements.IFlappybird, _placar: Interface.Elements.IPlacar) {
 
-        const _Frames = intervaloFrames[Config.Method.randomIntFromInterval(0, intervaloFrames.length - 1)]
-        const passouFrames = Config.frames % _Frames == 0;
+        const currentPoint = Storage.Get<number>(Config.KeyNameStorage.currentPoint) || 0;
+        const _Frames = intervalos_canos.Get(currentPoint);
+        const passouFrames = Config.Frames % _Frames == 0;
         if (passouFrames)
             this.pares.push({
                 x: Config.canvas.width,
@@ -82,7 +88,6 @@ export class Cano implements Interface.Elements.ICano {
             });
 
         for (let par of this.pares) {
-            const currentPoint = Storage.Get<number>(Config.KeyNameStorage.currentPoint) || 0;
             par.x = par.x - Velocidades.dispach(currentPoint);
 
             if (this.temColisaoComOFlappyBird(par, _flappyBird)) {
@@ -99,9 +104,18 @@ export class Cano implements Interface.Elements.ICano {
     }
 }
 
-const intervaloFrames = [
-    150
-]
+const intervalo_cano = {
+    "10": 150,
+    "20": 100,
+    "30": 80,
+}
+const intervalos_canos = {
+    Get: (pontuacao: number) => {
+        const keys = Object.keys(intervalo_cano).map(itm => new Number(itm));
+        const field = keys.find(key => key >= pontuacao) || keys[keys.length - 1]
+        return intervalo_cano[field as keyof object];
+    }
+}
 const dificuldade_velocidade = {
     "20": 2,
     "40": 2.5,
