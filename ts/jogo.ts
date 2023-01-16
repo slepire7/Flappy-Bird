@@ -4,6 +4,9 @@ import { Service } from './service/scoreapiService';
 import { Storage } from './storage';
 
 namespace Jogo.PageEvents {
+    function PauseGame() {
+        Config.IsPause = !Config.IsPause;
+    }
     export function CarregarPlacar() {
         Service.HttpService.ListarPontuacao().then((data) => {
             console.log(data);
@@ -24,20 +27,34 @@ namespace Jogo.PageEvents {
                 GetNickName();
                 Service.HttpService.CriarPontuacao();
             }
-            if (Game.Main.TelaAtiva.click) {
+            if (Game.Main.TelaAtiva.click && Config.IsPause == false) {
                 Game.Main.TelaAtiva.click();
             }
         });
 
         window.addEventListener('keypress', function (e: KeyboardEvent) {
-            if (Game.Main.TelaAtiva.click)
-                Game.Main.TelaAtiva.click()
-        })
+            const Action = KeysAccept[e.key as keyof typeof KeysAccept]
+            if (Action)
+                Action(Config.IsPause);
+        });
         document.querySelector('#pills-placar-tab').addEventListener('click', function () {
             CarregarPlacar();
         })
+        document.querySelector('#pills-pause-tab').addEventListener('click', function () {
+            PauseGame();
+        })
         Game.Main.mudaParaTela(Game.Main.Telas.INICIO);
         loop();
+    }
+    const KeysAccept = {
+        " ": (hasPaused: boolean) => {
+            if (hasPaused) return;
+            Game.Main.TelaAtiva.click()
+
+        },
+        "p": (hasPaused: boolean) => {
+            PauseGame();
+        }
     }
     function GetNickName() {
         let resposta: boolean;
@@ -51,7 +68,7 @@ namespace Jogo.PageEvents {
     function loop() {
         Game.Main.TelaAtiva.desenha();
         Game.Main.TelaAtiva.atualiza();
-        Config.frames += 1;
+        Config.Frames += 1;
         requestAnimationFrame(loop);
     }
 }

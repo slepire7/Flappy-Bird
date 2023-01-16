@@ -10,8 +10,8 @@ export namespace Config.Constant {
 export namespace Config {
     export const canvas = document.querySelector('canvas') as HTMLCanvasElement;
     export const contexto = canvas.getContext('2d') as CanvasRenderingContext2D;
-
-    export let frames = 0;
+    export let IsPause = false;
+    export let Frames = 0;
     export const KeyNameStorage = {
         lastPoint: 'FlappyBird1.0Lp',
         bestPoint: 'FlappyBird1.0bp',
@@ -52,7 +52,10 @@ export namespace Config.Method {
         return Math.floor(Math.random() * (max - min + 1) + min)
     }
     export function ClearMemory() {
-        frames = 0;
+        Frames = 0;
         Storage.Set(KeyNameStorage.currentPoint, 0)
+    }
+    export function IsNegative(number: number) {
+        return Math.sign(number) === -1
     }
 }
